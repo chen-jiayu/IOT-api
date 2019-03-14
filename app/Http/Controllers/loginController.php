@@ -79,8 +79,8 @@ class loginController extends Controller
 ]);}
          else
          	return response()->json([
-            'error' => 'citizen_id exist',
-            'status' => $token
+            'error' => 'citizen_id exist'
+            //'status' => $token
         
 ]);
         
