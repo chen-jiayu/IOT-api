@@ -55,11 +55,7 @@ class loginController extends Controller
             'citizen_id'=>'required',
             'password'=>'required'
      ]); 
-         return response()->json([
-            
-            'status' => '12'
-        
-]);}
+
          
       if(empty(DB::table('users')->where('citizen_id', '=',$request->input('citizen_id'))->value('citizen_id'))==true){
          $id_token=bcrypt($request->input('citizen_id'));
@@ -71,23 +67,9 @@ class loginController extends Controller
          $user->password= bcrypt($request->input('password'));
          $user->id_token= $id_token;
          $user->save();
-         $credentials = request(['citizen_id', 'password']);
-        try 
-        { $token = auth('api')->attempt($credentials);
-
-         $this->storerem_token($id_token,$token);
-       }
-       catch (Exception $e) {
-        
-       return  response()->json([
-            'error' => $e->getMessage()
-        
-]);
-       }
          	
          return response()->json([
             'id_token' => $id_token,
-            'remeber_token'=>$token,
             'status' => '1'
         
 ]);}
