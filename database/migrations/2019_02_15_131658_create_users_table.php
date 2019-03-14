@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile', 15);
             $table->string('email', 40)->nullable();
             $table->string('password', 200);
-            $table->string('remeber_token', 200)->nullable();
+            $table->string('remeber_token', 400)->nullable();
             $table->integer('workspace_id')->nullable();
             $table->string('citizen_id', 15);
             $table->string('id_token', 200)->nullable();
