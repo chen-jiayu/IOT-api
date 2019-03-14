@@ -58,8 +58,6 @@ class loginController extends Controller
          
       if(empty(DB::table('users')->where('citizen_id', '=',$request->input('citizen_id') )->value('citizen_id'))==true){
          $id_token=bcrypt($request->input('citizen_id'));
-         $credentials = request(['citizen_id', 'password']);
-         $token = 'asdasd';
          $user = new user();
          $user->user_name= $request->input('user_name');
          $user->mobile= $request->input('mobile');
@@ -67,12 +65,11 @@ class loginController extends Controller
          $user->citizen_id= $request->input('citizen_id');
          $user->password= bcrypt($request->input('password'));
          $user->id_token= $id_token;
-         $user->remeber_token=$token;
          $user->save();
-        // $credentials = request(['citizen_id', 'password']);
-         //$token = auth('api')->attempt($credentials);
+         $credentials = request(['citizen_id', 'password']);
+         $token = auth('api')->attempt($credentials);
 
-         //$this->storerem_token($id_token,$token);
+         $this->storerem_token($id_token,$token);
          	
          return response()->json([
             'id_token' => $id_token,
@@ -82,8 +79,8 @@ class loginController extends Controller
 ]);}
          else
          	return response()->json([
-            'error' => 'citizen_id exist'
-            //'status' => $token
+            'error' => 'citizen_id exist',
+            'status' => '0'
         
 ]);
         
