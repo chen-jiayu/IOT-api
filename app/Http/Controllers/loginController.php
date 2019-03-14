@@ -59,7 +59,7 @@ class loginController extends Controller
       if(empty(DB::table('users')->where('citizen_id', '=',$request->input('citizen_id') )->value('citizen_id'))==true){
          $id_token=bcrypt($request->input('citizen_id'));
          $credentials = request(['citizen_id', 'password']);
-         $token = auth('api')->attempt($credentials);
+         $token = 'asdasd';
          $user = new user();
          $user->user_name= $request->input('user_name');
          $user->mobile= $request->input('mobile');
