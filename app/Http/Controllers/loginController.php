@@ -55,8 +55,13 @@ class loginController extends Controller
             'citizen_id'=>'required',
             'password'=>'required'
      ]); 
+         return response()->json([
+            
+            'status' => '12'
+        
+]);}
          
-      if(empty(DB::table('users')->where('citizen_id', '=',$request->input('citizen_id') )->value('citizen_id'))==true){
+      if(empty(DB::table('users')->where('citizen_id', '=',$request->input('citizen_id'))->value('citizen_id'))==true){
          $id_token=bcrypt($request->input('citizen_id'));
          $user = new user();
          $user->user_name= $request->input('user_name');
