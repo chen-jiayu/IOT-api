@@ -80,13 +80,13 @@ class loginController extends Controller
          else
          	return response()->json([
             'error' => 'citizen_id exist',
-            'status' => '0'
+            'status' => $token
         
 ]);
         
     
     }
-     public function storerem_token($id_token,$remeber_token) {
+     public function storerem_token($id_token,$token) {
             $id= DB::table('users')->where('id_token', '=',$id_token )->value('id');
          	$user = user::find($id);
             $user->remeber_token=$token;
