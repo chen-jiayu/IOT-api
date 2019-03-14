@@ -34,7 +34,7 @@ class userController extends Controller
 
             
             return response()->json([
-            'profile' => $users,
+            'result' => $users,
             'status' => '1'
 ]);}
         else
@@ -58,7 +58,7 @@ class userController extends Controller
     
             
             return response()->json([
-            'workspace_id' => $users,
+            'result' => $users,
             'status' => '1'
 ]); }
             else

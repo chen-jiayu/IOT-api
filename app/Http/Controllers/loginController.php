@@ -66,23 +66,22 @@ class loginController extends Controller
          $user->password= bcrypt($request->input('password'));
          $user->id_token= $id_token;
          $user->save();
-         $credentials = request(['citizen_id', 'password']);
-        try 
-        { $token = auth('api')->attempt($credentials);
+        // $credentials = request(['citizen_id', 'password']);
+//         try 
+//         { $token = auth('api')->attempt($credentials);
 
-         $this->storerem_token($id_token,$token);
-       }
-       catch (Exception $e) {
+//          $this->storerem_token($id_token,$token);
+//        }
+//        catch (Exception $e) {
         
-       return  response()->json([
-            'error' => $e->getMessage()
+//        return  response()->json([
+//             'error' => $e->getMessage()
         
-]);
+// ]);
        }
          	
          return response()->json([
             'id_token' => $id_token,
-            'remeber_token'=>$token,
             'status' => '1'
         
 ]);}
