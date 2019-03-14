@@ -27,12 +27,12 @@ class returnid
            return $next($request);
         }
 
-        else
-            return response()->json([
-        'error' => 'please enter token',
-        'state'=>'0'
+    //     else
+    //         return response()->json([
+    //     'error' => 'please enter token',
+    //     'state'=>'0'
         
-    ]);
+    // ]);
          
         //return $next($request);
     }
