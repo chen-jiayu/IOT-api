@@ -6,71 +6,69 @@ use App\workspace_user;
 use App\workspace;
 use App\user;
 use DB;
+use Illuminate\Support\Arr;
+
 
 class workspacesController extends Controller
-{
-    public function index()
+{   
+    public function __construct()
     {
-        return workspace::all();                    
+        // 所有 method 都會先經過 auth 這個 middleware
+        $this->middleware('returnid');
+ 
+        // 只有 create 會經過 auth 這個 middleware
+      //  $this->middleware('auth',['only' => 'create']);
+ 
+        // 除了 index 之外都會先經過 auth 這個 middleware
+        //$this->middleware('returnid',['except' => 'checktoken','store']);
     }
-
-    public function show($workspace)  //變換蝦場
-    {   
-
-        $id = DB::table('workspace_users')->where('workspace_id', $workspace )->value('user_id');
+    //修改正在使用蝦場
+    public function show(Request $request)  
+    {   $workspace=$request->header('workspace_id');
+        $id=$request->get('remeber_token');
+       // $id = DB::table('workspace_users')->where('workspace_id', $workspace )->value('user_id');
         $user = user::find($id);
         $user->workspace_id=$workspace;
         $user->save();          
-        //return $id; 
         return response()->json([
-            'id_token' => $id,
             'status' => '1'
 ]);                       
     }
 
-    public function store(Request $request,$userid)  //建立養殖場，workspace_user新增
+    public function store(Request $request)  //建立養殖場，workspace_user新增
     {
         $this->validate($request,[
             'workspace_name'=>'required',
             'invite_code'=>'required'
-     ]);
-         $name=$request->input('invite_code');
-         $invite=DB::table('workspaces') ->pluck('invite_code');
-         $a=count($invite);
-         for($i=0;$i<$a;$i++){
-            if($name===$invite[$i]){
-                //return 'code exist,please rename';
-                return response()->json([
-            //'id_token' => $id,
+     ]); 
+        $id=$request->get('remeber_token');
+        
+    $name = DB::table('workspaces')->where('invite_code','=',$request->input('invite_code') )->value('invite_code');
+      //$name =DB::table('workspaces')->select('invite_code')->get();
+
+            if(!empty($name)){
+            return response()->json([
+            'error'=>'invite code exist',
             'status' => '0'
 ]); 
             }
-         }
+          else 
+
+            if(!empty($id)){
          $workspace = new workspace();
          $workspace->workspace_name= $request->input('workspace_name');
          $workspace->invite_code= $request->input('invite_code');
          $workspace->save();
      
          $workspace_user = new workspace_user();
-         $workspace_user->user_id=$userid;
+         $workspace_user->user_id=$id;
          $workspace_user->workspace_id=$workspace->id;
          $workspace_user->save();
           return response()->json([
-            //'id_token' => $id,
+            //'l'=>$name,
             'status' => '1'
-]); 
-       // return response()->json($workspace, 201);   //資料新增，回傳201代表資料成功新增
-    }
-    public function update(Request $request, workspace $workspace)
-    {
-        $workspace->update($request->all());
-
-        return response()->json($workspace, 200);   //資料更新，回傳200代表OK
-    }
-    public function delete(workspace $workspace)
-    {
-        $workspace->delete();
-
-        return response()->json(null, 204);    //資料刪除，回傳204代表動作成功執行不回傳內容
-    }
+]); }
+      
+  }
+      
 }

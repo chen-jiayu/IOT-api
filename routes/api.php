@@ -23,18 +23,19 @@ use App\user;
 
 
 
-Route::post('login', 'loginController@inrolecheck'); //登入
-Route::post('new', 'loginController@store');//建立新帳號
-Route::get('user/{id}', 'userController@show');//顯示個人資料
-Route::get('userworkspace/{id}', 'userController@showworkspace');//顯示個人蝦場
-Route::put('profile/{id}', 'loginController@update');//修改資料
-Route::put('password/{id}', 'loginController@updatepassword');//變更密碼
-Route::post('workspace/{userid}', 'workspacesController@store'); //建立養殖場
-Route::put('changeworkspace/{workspace}', 'workspacesController@show'); //變換蝦場
-Route::post('checktoken', 'loginController@checktoken');
-Route::middleware('jwt.auth')->get('users', function () {
-    return auth('api')->user();
-});
+
+Route::post('user', 'loginController@store');//建立新帳號
+Route::put('user', 'loginController@update');//修改資料
+Route::post('userLogin', 'loginController@checktoken'); //登入
+Route::put('userpassword', 'loginController@updatepassword');//變更密碼
+Route::get('user', 'userController@show');//顯示個人資料
+Route::get('workspace', 'userController@showworkspace');//顯示個人蝦場
+Route::post('workspace', 'workspacesController@store'); //建立養殖場
+Route::put('workspace', 'workspacesController@show'); //修改正在使用蝦場
+// Route::post('checktoken', 'loginController@checktoken');
+// Route::middleware('jwt.auth')->get('users', function () {
+//     return auth('api')->user();
+// });
 
 //Route::get('workspace/{id}', 'workspacesController@show');
 

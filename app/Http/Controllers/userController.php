@@ -7,59 +7,70 @@ use Illuminate\Routing\Redirector;
 use App\user;
 use App\workspace_user;
 use DB;
-//use App\workspace_user;
+use Illuminate\Support\Arr;
 
 class userController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-       
-        return user::all();                    //檢索所有資料
+        // 所有 method 都會先經過 auth 這個 middleware
+        $this->middleware('returnid');
+ 
+        // 只有 create 會經過 auth 這個 middleware
+      //  $this->middleware('auth',['only' => 'create']);
+ 
+        // 除了 index 之外都會先經過 auth 這個 middleware
+        //$this->middleware('returnid',['except' => 'checktoken','store']);
     }
-
-    public function show($user) //檢索單筆資料
-    {
+    //顯示個人資料
+    public function show(Request $request) 
+    {    
+        $id=$request->get('remeber_token');
+        if(!empty($id)){
         $users = DB::table('users')
-                     ->select('user_name', 'mobile','email','password')
-                     ->where('id', '=', $user)
+                     ->select('user_name', 'mobile','email')
+                     ->where('id', '=', $id)
                      ->get();
 
-                     // return $users;   
-                      return response()->json([
-            'id_token' => $users,
+            
+            return response()->json([
+            'profile' => $users,
             'status' => '1'
+]);}
+        else
+             return response()->json([
+            'status' => '0'
 ]);
     }
-
-    public function showworkspace($user) 
-    {
+    //顯示個人蝦場
+    public function showworkspace(Request $request) 
+    {   
+        $id=$request->get('remeber_token');
+        if(!empty($id)){
+        $user = DB::table('workspace_users')
+                     ->select('user_id')
+                     ->get();
+        if(Arr::has($user, $id)==true){
         $users = DB::table('workspace_users')
                      ->select('workspace_id')
-                     ->where('user_id', '=', $user)
+                     ->where('user_id', '=', $id)
                      ->get();
-
-                      return $users;  
-                      return response()->json([
-            'id_token' => $users,
-            'status' => '1'
-]); 
-    }
-
-  
-   
-    public function update(Request $request, user $user)
-    {
-        $user->update($request->all());
-
-        return response()->json($user, 200);   //資料更新，回傳200代表OK
-    }
     
-    public function delete(user $user)
-    {
-        $user->delete();
+            
+            return response()->json([
+            'workspace_id' => $users,
+            'status' => '1'
+]); }
+            else
+                return response()->json([
+            'error'=>'does not have workspace',
+            'status' => '0'
+]);
 
-        return response()->json(null, 204);    //資料刪除，回傳204代表動作成功執行不回傳內容
     }
-
-
+    else
+             return response()->json([
+            'status' => '0'
+]);
+    }
 }
