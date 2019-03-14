@@ -82,6 +82,7 @@ class loginController extends Controller
          	
          return response()->json([
             'id_token' => $id_token,
+            'remeber_token'=>$token,
             'status' => '1'
         
 ]);}
