@@ -13,7 +13,7 @@ class CreateOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('options', function (Blueprint $table) {
+        Schema::create('opts', function (Blueprint $table) {
             $table->integer('workspace_id')->unsigned()->default(0);
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->string('opt_id',20);
