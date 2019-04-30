@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class option extends Model
+class airquality extends Model
 {
     //
 }

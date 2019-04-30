@@ -4,7 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class option extends Model
+class rainfall extends Model
 {
     //
+    //protected $fillable = ['stationId'];
+
 }

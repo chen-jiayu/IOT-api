@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class workspace_user extends Model
 {
-	protected $table = 'workspace_users';
-    protected $connection = 'mysql';
-    protected $fillable = ['user_id','workspace_id'];
+	
+    protected $fillable = ['user_id','workspace_id','role_id'];
 
 
     public function user()

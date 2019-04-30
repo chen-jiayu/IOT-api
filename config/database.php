@@ -66,7 +66,7 @@ return [
         //     'prefix' => '',
         //     'prefix_indexes' => true,
         //     'strict' => true,
-        //     'engine' => null,z
+        //     'engine' => null,
         // ],
 
         'pgsql' => [

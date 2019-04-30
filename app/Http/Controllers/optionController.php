@@ -3,35 +3,103 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\workspace;
+use App\user;
 use App\option;
+use App\pond_shrimp;
+use App\field_feed;
+use DB;
 
 class optionController extends Controller
 {
-    public function index()
-    {
-        return option::all();                    //檢索所有資料
-    }
+    //
+	public function __construct()
+	{
+		$this->middleware('returnid');
+	}
+	public function store(Request $request) 
+	{
+		try {
+			DB::connection()->getPdo()->beginTransaction();
+			$id=$request->get('remeber_token');
+			$workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
+			if(!empty($id)){
+				$option=new option();
+				$option->workspace_id=$workspace_id;
+				$option->opt_id=$request->input('opt_id');
+				$option->opt_value=$request->input('opt_value');
+				$option->save();
 
-    public function show(option $option)
-    {
-        return $option;                          //檢索單筆資料
-    }
-    public function store(Request $request)
-    {
-        $option = option::create($request->all());
+				return response()->json([
+					'status' => '1'
 
-        return response()->json($option, 201);   //資料新增，回傳201代表資料成功新增
-    }
-    public function update(Request $request, option $option)
-    {
-        $option->update($request->all());
+				]);
+			} else
+			return response()->json([
+				'status' => '0',
+				'code'=>1,
+				'message'=>'missing attrs'
 
-        return response()->json($option, 200);   //資料更新，回傳200代表OK
-    }
-    public function delete(option $option)
-    {
-        $option->delete();
+			]);
+		} catch (\PDOException $e) {
+			DB::connection()->getPdo()->rollBack();
+			return response()->json([
+				'status' => '0',
+				'code'=>0,
+				'message'=>$e->getMessage()
 
-        return response()->json(null, 204);    //資料刪除，回傳204代表動作成功執行不回傳內容
-    }
+			]);
+		}
+	}
+	public function get(Request $request,$optid) 
+	{
+		try {
+			DB::connection()->getPdo()->beginTransaction();
+			$id=$request->get('remeber_token');
+			if(!empty($id)){
+				$workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
+				if(empty($workspace_id)){
+					return response()->json([
+						'status' => '0',
+						'code'=>2,
+						'message'=>'data not found'
+					]);
+				}
+				if($optid=='shrimptype'){
+					$option=DB::table('options')->where('opt_id', '=','shrimptype')->where('opt_id', '=','shrimptype')->get();
+				}
+				if($optid=='babysprimp'){
+					$option=DB::table('options')->where('opt_id', '=','babysprimp')->where('opt_id', '=','babysprimp')->get();
+				}
+				if($optid=='feed_size'){
+		$option=DB::table('options')->where('workspace_id', '=',$workspace_id)->where('opt_id', '=','feed_size')->get();
+				}
+				$result = array(
+					'worksapce_id' =>  $workspace_id,
+					'opt_id' =>  $optid,
+					'opt_value' =>  $option
+				); 
+				return response()->json([
+					'result'=>$option,
+					'status' => '1'
+
+				]);
+			} else
+			return response()->json([
+				'status' => '0',
+				'code'=>1,
+				'message'=>'missing attrs'
+
+			]);
+		} catch (\PDOException $e) {
+			DB::connection()->getPdo()->rollBack();
+			return response()->json([
+				'status' => '0',
+				'code'=>0,
+				'message'=>$e->getMessage()
+
+			]);
+		}
+	}
+
 }

@@ -6,20 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class field extends Model
 {
-    //
-    public function state()
+	protected $fillable = ['workspace_id','field_name','field_position','state_id'];
+    
+    public function pond()
     {
-        return $this->belongsTo('App\state');
+        return $this->hasMany('App\pond', 'foreign_key');
+    }
+    public function field_feed()
+    {
+        return $this->hasMany('App\field_feed', 'foreign_key');
     }
     public function workspace()
     {
         return $this->belongsTo('App\workspace');
     }
-
-     
-    public function pond()
+    public function state()
     {
-        return $this->hasMany('App\pond', 'foreign_key');
+        return $this->belongsTo('App\state');
     }
 
 }
