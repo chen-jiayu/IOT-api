@@ -14,10 +14,9 @@ class rainfallController extends Controller
   public function store(Request $request) 
   {
     try{
-     DB::connection()->getPdo()->beginTransaction();
      $city=DB::table('states')->where('state_name', '=',$request->input('city'))->value('id');
      $town=DB::table('districts')->where('district_name', '=',$request->input('district'))->value('id');
-
+     DB::connection()->getPdo()->beginTransaction();
      if(empty($city)&&empty($town)){
       return response()->json([
         'status' => '0',
@@ -42,6 +41,7 @@ class rainfallController extends Controller
     $rainfall->NOW=$request->input('NOW');
     $rainfall->ATTRIBUTE=$request->input('ATTRIBUTE');
     $rainfall->save();
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'status' => '1'
     ]);
@@ -68,6 +68,7 @@ public function get(Request $request,$state_id,$district_id,$time)
         'message'=>'data not found'
       ]);
     }
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'result' => $rainfall,	
       'status' => '1'    

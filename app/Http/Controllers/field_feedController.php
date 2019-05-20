@@ -39,7 +39,8 @@ public function store(Request $request)
       $field_feed->inventory_weight=$request->input('inventory_weight');
       $field_feed->inventory_min=$request->input('inventory_min');
       $field_feed->save();
-
+      
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result'=> $field_feed->id,
         'status' => '1'
@@ -81,7 +82,7 @@ public function put(Request $request,$field_feed_id)
       $field_feed->inventory_weight=$request->input('inventory_weight');
       $field_feed->inventory_min=$request->input('inventory_min');
       $field_feed->save();
-
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'status' => '1'
 
@@ -124,7 +125,7 @@ public function get(Request $request,$field_feed_id)
        'inventory_min'=>$field_feed->inventory_min,
        'is_deleted'=>$field_feed->is_deleted
      );
-
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result'=>$result,
         'status' => '1'

@@ -34,7 +34,7 @@ Route::post('joinworkspace', 'workspacesController@join');
 //supplier
 Route::post('supplier', 'supplierController@store');//新增廠商
 Route::put('supplier/{supplier_id}', 'supplierController@put');//修改場商
-Route::get('supplier/{supplier_id}', 'supplierController@get');//修改場商
+Route::get('supplier/{supplier_id}', 'supplierController@get');//取得場商
 Route::get('suppliers', 'supplierController@gets');
 //field
 Route::post('field', 'fieldController@store');//新增廠區
@@ -62,7 +62,7 @@ Route::post('pondshrimp', 'pondshrimpController@store');
 Route::put('pondshrimp/{pond_id}', 'pondshrimpController@put');
 //field_feed
 Route::post('field_feed', 'field_feedController@store');
-Route::put('field_feed/{field_feed_id}', 'field_feedController@put');
+//Route::put('field_feed/{field_feed_id}', 'field_feedController@put');
 Route::get('field_feed/{field_feed_id}', 'field_feedController@get');
 //field_feed_log
 Route::post('field_feed_log', 'field_feed_logController@store');
@@ -75,7 +75,7 @@ Route::put('daily_note/{note_id}', 'daily_noteController@put');
 Route::get('daily_note/{note_id}', 'daily_noteController@get');
 Route::get('daily_notes','daily_noteController@gets');
 //district
-Route::get('districts', 'districtController@get');
+Route::get('districts/{state_id}', 'districtController@get');
 Route::post('district', 'districtController@store');//新增縣市
 //option
 Route::get('option/{optid}', 'optionController@get');

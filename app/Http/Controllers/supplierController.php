@@ -38,6 +38,7 @@ class supplierController extends Controller
       $supplier->address=$request->input('address');
       $supplier->note=$request->input('note');
       $supplier->save();
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result'=>$supplier->id,
         'status' => '1'
@@ -75,11 +76,13 @@ public function gets(Request $request)
           'message'=>'data not found'
         ]);
       }
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result' => $supplier,
         'status' => '1'
       ]);
     } else
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'status' => '0',
       'code'=>1,
@@ -121,18 +124,19 @@ public function get(Request $request,$supplier_id)
         'address'=>$supplier->address,
         'note'=>$supplier->note
       );
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result' => $result,
         'status' => '1'
       ]);
-    }else
+      DB::connection()->getPdo()->commit();
     return response()->json([
       'status' => '0',
       'code'=>1,
       'message'=>'missing attrs'
 
     ]);
-  } catch (\PDOException $e) {
+  } }catch (\PDOException $e) {
     DB::connection()->getPdo()->rollBack();
     return response()->json([
       'status' => '0',
@@ -166,10 +170,13 @@ public function put(Request $request,$supplier_id)
     $supplier->address=$request->input('address');
     $supplier->note=$request->input('note');
     $supplier->save();
+
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'status' => '1'
     ]);
   } else
+
   return response()->json([
     'status' => '0',
     'code'=>1,

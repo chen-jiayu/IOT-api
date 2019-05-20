@@ -44,7 +44,9 @@ class loginController extends Controller
           $user->remeber_token=$token;
           $user->save();
         }
+        DB::connection()->getPdo()->commit();
         return response()->json([
+          'status' => '1',
           'id_token' => $id_token,
           'remember_token' => $token,
           'expires' => auth('api')->factory()->getTTL() * 60,
@@ -89,7 +91,7 @@ class loginController extends Controller
        $user->password= bcrypt($request->input('password'));
        $user->id_token= $id_token;
        $user->save();
-
+       DB::connection()->getPdo()->commit();
        return response()->json([
         'id_token' => $id_token,
         'status' => '1'
@@ -137,6 +139,7 @@ class loginController extends Controller
         $user->mobile = $request->input('mobile');
         $user->email = $request->input('email');
         $user->save();
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'status' => '1'
         ]);
@@ -169,6 +172,7 @@ class loginController extends Controller
         if(Hash::check($old,$user->password)){
         	$user->password = bcrypt($request->input('newpassword')); //舊密碼
         	$user->save();
+          DB::connection()->getPdo()->commit();
         	return response()->json([
             'status' => '1'
           ]);	

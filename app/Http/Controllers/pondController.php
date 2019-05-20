@@ -19,7 +19,6 @@ class pondController extends Controller
   public function store(Request $request) 
   { 
     try{
-      DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
       if(!empty($id)){
         if(DB::table('ponds')->where('pond_name', '=',$request->input('pond_name'))==true){
@@ -37,6 +36,7 @@ class pondController extends Controller
             'message'=>'data not found'
           ]);
         }
+        DB::connection()->getPdo()->beginTransaction();
         $state_id=DB::table('fields')->where('id', '=',$request->input('field_id') )->value('state_id');
         $pond=new pond();
         $pond->workspace_id=$workspace_id;
@@ -47,6 +47,8 @@ class pondController extends Controller
         $pond->width=$request->input('width');
         $pond->waterwheel=$request->input('waterwheel');
         $pond->save();
+
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=>$pond->id,
           'status' => '1'
@@ -70,7 +72,6 @@ class pondController extends Controller
   public function put(Request $request,$pond_id) 
   { 
     try{
-      DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
       if(!empty($id)){
         $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
@@ -82,6 +83,7 @@ class pondController extends Controller
             'message'=>'data not found'
           ]);
         }
+        DB::connection()->getPdo()->beginTransaction();
         if($pond->workspace_id==$workspace_id){
           $pond->pond_name=$request->input('pond_name');
           $pond->is_closed=$request->input('is_closed');
@@ -98,6 +100,7 @@ class pondController extends Controller
              $pond_shrimp->save();
            }
          }
+         DB::connection()->getPdo()->commit();
          return response()->json([
           'status' => '1'
         ]);
@@ -157,6 +160,7 @@ public function get(Request $request,$pond_id)
              'end_date' =>$pond_shrimp->end_date
            )
           ); 
+          DB::connection()->getPdo()->commit();
           return response()->json([
             'result'=>$result,
             'status' => '1'

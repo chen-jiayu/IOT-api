@@ -14,16 +14,15 @@ class CreateOptionsTable extends Migration
     public function up()
     {
         Schema::create('options', function (Blueprint $table) {
-            $table->increments('opt_id');
-            $table->string('opt_value');
             $table->integer('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
+            $table->string('opt_id',20);
+            $table->string('opt_value',20);
             $table->tinyInteger('is_deleted')->default(0);
+            $table->integer('created_id')->nullable();
+            $table->integer('updated_id')->nullable();
             $table->timestamps();
-            $table->integer('created_id');
-            $table->integer('updated_id');
         });
-
     }
 
     /**

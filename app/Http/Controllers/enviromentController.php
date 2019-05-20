@@ -41,7 +41,7 @@ class enviromentController extends Controller
        $enviroment->get_day=$request->input('get_day');
        $enviroment->save();
 
-
+       DB::connection()->getPdo()->commit();
        return response()->json([
         'status' => '1'
 
@@ -74,6 +74,7 @@ class enviromentController extends Controller
 
 
     }
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'result'=>$enviroment,
       'status' => '1'

@@ -43,7 +43,7 @@ class fieldController extends Controller
         $field->field_name=$request->input('field_name');
         $field->state_id=$request->input('state_id');
         $field->save();
-
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=> $field->id,
           'status' => '1'
@@ -87,7 +87,7 @@ class fieldController extends Controller
          $field->state_id=$request->input('state_id');
          $field->save();
        }
-
+       DB::connection()->getPdo()->commit();
        return response()->json([
         'status' => '1'
       ]);
@@ -132,6 +132,7 @@ public function get(Request $request,$field_id)
          'fieid_name'=>  $field->field_name,
          'pond'=>$pond
        );
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=>$result,
           'status' => '1'

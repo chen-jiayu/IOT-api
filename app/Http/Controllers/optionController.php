@@ -29,7 +29,8 @@ class optionController extends Controller
 				$option->opt_id=$request->input('opt_id');
 				$option->opt_value=$request->input('opt_value');
 				$option->save();
-
+                
+                DB::connection()->getPdo()->commit();
 				return response()->json([
 					'status' => '1'
 
@@ -79,6 +80,7 @@ class optionController extends Controller
 					'opt_id' =>  $optid,
 					'opt_value' =>  $option
 				); 
+				DB::connection()->getPdo()->commit();
 				return response()->json([
 					'result'=>$option,
 					'status' => '1'

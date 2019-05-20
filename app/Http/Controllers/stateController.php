@@ -24,6 +24,7 @@ class stateController extends Controller
     }
     $state->state_name=$request->input('state_name');
     $state->save();
+    DB::connection()->getPdo()->commit();
 
     return response()->json([
       'status' => '1'
@@ -50,6 +51,7 @@ public function get(Request $request)
       'message'=>'data not found'
     ]);
    }
+   DB::connection()->getPdo()->commit();
    return response()->json([
     'result'=>$states,
     'status' => '1'

@@ -48,6 +48,7 @@ class airqualityController extends Controller
 			$airquality->SO2=$request->input('SO2');
 			$airquality->SO2_AVG=$request->input('SO2_AVG');
 			$airquality->save();
+			DB::connection()->getPdo()->commit();
 			return response()->json([
 				'status' => '1'
 			]);
@@ -74,6 +75,7 @@ class airqualityController extends Controller
 				]);
 			}
 			$airquality = airquality::latest()->first();
+			DB::connection()->getPdo()->commit();
 			return response()->json([
 				'result' => $airquality,	
 				'status' => '1'    

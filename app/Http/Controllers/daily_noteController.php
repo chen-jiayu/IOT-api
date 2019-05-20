@@ -43,7 +43,8 @@ class daily_noteController extends Controller
         $dailt_note->eating_duration=$request->input('eating_duration');
         $dailt_note->note=$request->input('note');
         $dailt_note->save();
-
+        
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=> $dailt_note->id,
           'status' => '1'
@@ -85,6 +86,7 @@ class daily_noteController extends Controller
       $dailt_note->eating_duration=$request->input('eating_duration');
       $dailt_note->note=$request->input('note');
       $dailt_note->save();
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'status' => '1'
 
@@ -131,7 +133,7 @@ public function get(Request $request,$note_id)
      'eating_duration'=>$daily_note->eating_duration,
      'note'=>$daily_note->note
    );
-
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'result'=>$result,
       'status' => '1'
@@ -169,7 +171,7 @@ public function gets(Request $request)
         'message'=>'data not found'
       ]);
     }
-
+    DB::connection()->getPdo()->commit();
     return response()->json([
       'result'=>$result,
       'status' => '1'

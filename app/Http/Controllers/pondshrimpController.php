@@ -95,7 +95,8 @@ public function put(Request $request,$pond_id)
       $pondshrimp->start_date=$request->input('start_date');
       $pondshrimp->end_date=$request->input('end_date');
       $pondshrimp->save();
-
+      
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'status' => '1'
       ]);

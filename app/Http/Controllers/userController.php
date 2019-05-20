@@ -56,7 +56,8 @@ class userController extends Controller
           'role_name' => $user_role->role_name,
           'status' => $workspace->status
         )
-      );    
+      ); 
+     // DB::connection()->getPdo()->commit();   
       return response()->json([
         'result' => $result ,
         'status' => '1',
@@ -69,6 +70,7 @@ class userController extends Controller
           'email' => $user->email,
           'workspace'=>'null'
         );
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result' => $result ,
         'status' => '1'
@@ -105,6 +107,8 @@ public function showworkspace(Request $request)
         ->join('users', 'users.id', '=', 'workspaces.user_id')
         ->select('workspaces.workspace_name', 'users.user_name','workspace_users.workspace_id')
         ->get();
+
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result' => $users,
           'status' => '1'

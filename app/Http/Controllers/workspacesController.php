@@ -36,7 +36,8 @@ class workspacesController extends Controller
           ]);
         }       
         $user->workspace_id=$workspace;
-        $user->save();          
+        $user->save(); 
+        DB::connection()->getPdo()->commit();         
         return response()->json([
           'status' => '1'
         ]);
@@ -88,6 +89,8 @@ class workspacesController extends Controller
        $workspace_user->role_id='1';
        $workspace_user->save();
 
+
+
        $user=user::find($id);
        if(empty($user)){
         return response()->json([
@@ -98,6 +101,7 @@ class workspacesController extends Controller
       }         
       $user->workspace_id=$workspace->id;
       $user->save();
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result'=> $workspace->id,
         'status' => '1'
@@ -139,7 +143,8 @@ public function join(Request $request)
          $user = user::find($id);
          $user->workspace_id=$workspace_user->workspace_id;
          $user->save();
-
+         
+         DB::connection()->getPdo()->commit();
          return response()->json([
           'status' => '1'
         ]);
@@ -157,6 +162,7 @@ public function join(Request $request)
         'message'=>'data not found'
       ]);
   } else
+  
   return response()->json([
     'status' => '0',
     'code'=>1,
@@ -191,6 +197,7 @@ public function get(Request $request)
           'message'=>'data not found'
         ]);
       }  
+      DB::connection()->getPdo()->commit();
       return response()->json([
         'result' => $work,
         'status' => '1'

@@ -45,7 +45,7 @@ class field_feed_logController extends Controller
         }
         $field_feed_log->inventory_weight=$request->input('inventory_weight');
         $field_feed_log->save();
-
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=> $field_feed_log->id,
           'status' => '1'
@@ -93,11 +93,9 @@ class field_feed_logController extends Controller
           daily_note::find($daily_id)->increment('feeding_wieght',$request->input('inventory_weight'));
         }
         $field_feed_log->save();
-
+        DB::connection()->getPdo()->commit();
         return response()->json([
-
           'status' => '1'
-
         ]);
       }
       else
@@ -138,7 +136,7 @@ class field_feed_logController extends Controller
          'inventory_weight'=>$field_feed_log->inventory_weight
 
        );
-
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=>$result,
           'status' => '1'
@@ -175,6 +173,7 @@ class field_feed_logController extends Controller
             'message'=>'data not found'
           ]);
         }
+        DB::connection()->getPdo()->commit();
         return response()->json([
           'result'=>$result,
           'status' => '1'
