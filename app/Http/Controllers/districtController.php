@@ -12,18 +12,26 @@ class districtController extends Controller
 	public function store(Request $request) 
 	{
 		try {
-			DB::connection()->getPdo()->beginTransaction();
+			
+			$data = $request->input('data');
+			$i=count($data);
+            DB::connection()->getPdo()->beginTransaction();
+			for($j=0 ; $j<$i ; $j++){
+			$district_num=$data[$j]["district"];
+			$district_name=$data[$j]["d-id"];
+			
 			$district=new district();
-			$district->id=$request->input('id');
-			if(!empty(district::find($request->input('id')))){
+			$district->id=$district_num;
+			if(!empty(district::find($district_num))){
 				return response()->json([
 					'status' => '0',
 					'code'=>3,
 					'message'=>'data duplicate'
 				]);
 			}
-			$district->district_name=$request->input('district_name');
+			$district->district_name=$district_name;
 			$district->save();
+		}
 			DB::connection()->getPdo()->commit();
 			return response()->json([
 				'status' => '1'

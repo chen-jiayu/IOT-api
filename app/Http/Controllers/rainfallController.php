@@ -13,34 +13,46 @@ class rainfallController extends Controller
 {
   public function store(Request $request) 
   {
+    function unicodeDecode($unicode_str)
+    {
+    $json = '{"str":"'.$unicode_str.'"}';
+    $arr = json_decode($json,true);
+    if(empty($arr)) return '';
+    return $arr['str'];
+}
     try{
-     $city=DB::table('states')->where('state_name', '=',$request->input('city'))->value('id');
-     $town=DB::table('districts')->where('district_name', '=',$request->input('district'))->value('id');
+     $data = $request->input('data');
+     $i=count($data);
      DB::connection()->getPdo()->beginTransaction();
-     if(empty($city)&&empty($town)){
-      return response()->json([
-        'status' => '0',
-        'code'=>2,
-        'message'=>'data not found'
-      ]);
+     for($j=0 ; $j<$i ; $j++){
+      $city_id=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
+      $twon_id= DB::table('districts')->where('district_name', '=',unicodeDecode($data[$j]["district"]))->value('id');
+        DB::table('enviroments')->where('district_id', '=',$twon_id)->where('DAY', '=',$data[$j]["DAY"])->where('TIME', '=',$data[$j]["TIME"])->delete();
+      if(empty($city_id)||empty($twon_id)){
+        return response()->json([
+          'status' => '0',
+          'code'=>2,
+          'message'=>'data not found'
+        ]);
+      }
+      $rainfall=new rainfall();
+      $rainfall->station_id=$data[$j]["stationId"];
+      $rainfall->locationName=$data[$j]["locationName"];
+      $rainfall->CITY=$city_id;
+      $rainfall->TOWN=$twon_id;
+      $rainfall->time=$data[$j]["TIME"];
+      $rainfall->day=$data[$j]["DAY"];
+      $rainfall->ELEV=$data[$j]["ELEV"];
+      $rainfall->RAIN=$data[$j]["RAIN"];
+      $rainfall->MIN_10=$data[$j]["MIN_10"];
+      $rainfall->HOUR_3=$data[$j]["HOUR_3"];
+      $rainfall->HOUR_6=$data[$j]["HOUR_6"];
+      $rainfall->HOUR_12=$data[$j]["HOUR_12"];
+      $rainfall->HOUR_24=$data[$j]["HOUR_24"];
+      $rainfall->NOW=$data[$j]["NOW"];
+      $rainfall->ATTRIBUTE=$data[$j]["ATTRIBUTE"];
+      $rainfall->save();
     }
-    $rainfall=new rainfall();
-    $rainfall->station_id=$request->input('station_id');
-    $rainfall->locationName=$request->input('locationName');
-    $rainfall->CITY=$city;
-    $rainfall->TOWN=$town;
-    $rainfall->time=$request->input('TIME');
-    $rainfall->day=$request->input('DAY');
-    $rainfall->ELEV=$request->input('ELEV');
-    $rainfall->RAIN=$request->input('RAIN');
-    $rainfall->MIN_10=$request->input('MIN_10');
-    $rainfall->HOUR_3=$request->input('HOUR_3');
-    $rainfall->HOUR_6=$request->input('HOUR_6');
-    $rainfall->HOUR_12=$request->input('HOUR_12');
-    $rainfall->HOUR_24=$request->input('HOUR_24');
-    $rainfall->NOW=$request->input('NOW');
-    $rainfall->ATTRIBUTE=$request->input('ATTRIBUTE');
-    $rainfall->save();
     DB::connection()->getPdo()->commit();
     return response()->json([
       'status' => '1'

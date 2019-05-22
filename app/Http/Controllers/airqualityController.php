@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Str;
+
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\state;
 use App\district;
 use App\airquality;
@@ -12,42 +14,59 @@ class airqualityController extends Controller
 {
 	public function store(Request $request) 
 	{
-		try{
-			DB::connection()->getPdo()->beginTransaction();
-			$city=DB::table('states')->where('state_name', '=',$request->input('city'))->value('id');
-			$twon = DB::table('districts')->where(\DB::raw('SUBSTRING(district_name, 1, 2)'),'=',$request->input('district'))->value('id');
 
-			if(empty($city)||empty($twon)){
-				return response()->json([
-					'status' => '0',
-					'code'=>2,
-					'message'=>'data not found'
-				]);
+		function unicodeDecode($unicode_str){
+           $json = '{"str":"'.$unicode_str.'"}';
+           $arr = json_decode($json,true);
+           if(empty($arr)) return '';
+           return $arr['str'];
+        }
+
+		try{
+			$data = $request->input('data');
+			$i=count($data);
+			DB::connection()->getPdo()->beginTransaction();
+
+			for($j=0 ; $j<$i ; $j++){
+				
+				$city=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
+
+				
+			
+				$twon = DB::table('districts')->where(\DB::raw('SUBSTRING(district_name, 1, 2)'),'=',unicodeDecode($data[$j]["district"]))->value('id');
+
+				echo $twon;
+
+				if(empty($twon)){
+					continue;
+				}
+
+				$airquality=new airquality();
+				$airquality->AQI=$data[$j]["AQI"];
+				$airquality->CO=$data[$j]["CO"];
+				$airquality->CITY=$city;
+				$airquality->TOWN=$twon;
+				$airquality->CO_8hr=$data[$j]["CO_8hr"];
+				$airquality->Latitude=$data[$j]["Latitude"];
+				$airquality->Longitude=$data[$j]["Longitude"];
+				$airquality->NO=$data[$j]["NO"];
+				$airquality->NO2=$data[$j]["NO2"];
+				$airquality->NOx=$data[$j]["NOx"];
+				$airquality->O3=$data[$j]["O3"];
+				$airquality->O3_8hr=$data[$j]["O3_8hr"];
+				$airquality->PM10=$data[$j]["PM10"];
+				$airquality->PM10_AVG=$data[$j]["PM10_AVG"];
+				$airquality->PM2_5=$data[$j]["PM2.5"];
+				$airquality->PM2_5_AVG=$data[$j]["PM2.5_AVG"];
+				$airquality->Pollutant=$data[$j]["Pollutant"];
+				$airquality->day=$data[$j]["DAY"];
+				$airquality->time=$data[$j]["TIME"];
+				//$airquality->day=$data[$j]["get-day"];
+				$airquality->status=$data[$j]["Status"];
+				$airquality->SO2=$data[$j]["SO2"];
+				$airquality->SO2_AVG=$data[$j]["SO2_AVG"];
+				$airquality->save();
 			}
-			$airquality=new airquality();
-			$airquality->AQI=$request->input('AQI');
-			$airquality->CO=$request->input('CO');
-			$airquality->CITY=$city;
-			$airquality->TOWN=$twon;
-			$airquality->CO_8hr=$request->input('CO_8hr');
-			$airquality->Latitude=$request->input('Latitude');
-			$airquality->Longitude=$request->input('Longitude');
-			$airquality->NO=$request->input('NO');
-			$airquality->NO2=$request->input('NO2');
-			$airquality->NOx=$request->input('NOx');
-			$airquality->O3=$request->input('O3');
-			$airquality->O3_8hr=$request->input('O3_8hr');
-			$airquality->PM10=$request->input('PM10');
-			$airquality->PM10_AVG=$request->input('PM10_AVG');
-			$airquality->PM2_5=$request->input('PM2.5');
-			$airquality->PM2_5_AVG=$request->input('PM2.5_AVG');
-			$airquality->Pollutant=$request->input('Pollutant');
-			$airquality->time=$request->input('TIME');
-			$airquality->day=$request->input('DAY');
-			$airquality->status=$request->input('status');
-			$airquality->SO2=$request->input('SO2');
-			$airquality->SO2_AVG=$request->input('SO2_AVG');
-			$airquality->save();
 			DB::connection()->getPdo()->commit();
 			return response()->json([
 				'status' => '1'

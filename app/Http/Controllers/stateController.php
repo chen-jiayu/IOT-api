@@ -12,18 +12,25 @@ class stateController extends Controller
   public function store(Request $request) 
   {
    try {
+    $data = $request->input('data');
+    $i=count($data);
     DB::connection()->getPdo()->beginTransaction();
+
+    for($j=0 ; $j<$i ; $j++){
+      $state_num=$data[$j]["c-id"];
+      $state_name=$data[$j]["city"];
      $state=new state();
-     $state->id=$request->input('id');
-     if(!empty(state::find($request->input('id')))){
+     $state->id=$state_num;
+     if(!empty(state::find($state_num))){
       return response()->json([
         'status' => '0',
         'code'=>3,
         'message'=>'data duplicate'
       ]);
     }
-    $state->state_name=$request->input('state_name');
+    $state->state_name=$state_name;
     $state->save();
+  }
     DB::connection()->getPdo()->commit();
 
     return response()->json([
