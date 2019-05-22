@@ -30,17 +30,13 @@ class airqualityController extends Controller
 			for($j=0 ; $j<$i ; $j++){
 				
 				$city=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
-
-				
-			
 				$twon = DB::table('districts')->where(\DB::raw('SUBSTRING(district_name, 1, 2)'),'=',unicodeDecode($data[$j]["district"]))->value('id');
-
-				echo $twon;
-
+				//echo $twon;
+                //$t=unicodeDecode($data[$j]["district"]);
 				if(empty($twon)){
 					continue;
 				}
-
+             DB::table('airqualities')->where('TOWN', '=',$twon)->where('day', '=',$data[$j]["DAY"])->where('time', '=',$data[$j]["TIME"])->delete();
 				$airquality=new airquality();
 				$airquality->AQI=$data[$j]["AQI"];
 				$airquality->CO=$data[$j]["CO"];
@@ -85,7 +81,7 @@ class airqualityController extends Controller
 	{
 		try{
 			DB::connection()->getPdo()->beginTransaction();
-			$airquality=DB::table('airqualities')->where('CITY', '=',$state_id)->where('TOWN', '=',$district_id)->where('DAY', '=',$time)->get();
+			$airquality=DB::table('airqualities')->where('CITY', '=',$state_id)->where('TOWN', '=',$district_id)->where('day', '=',$time)->get();
 			if(empty($airquality)){
 				return response()->json([
 					'status' => '0',
@@ -93,7 +89,7 @@ class airqualityController extends Controller
 					'message'=>'data not found'
 				]);
 			}
-			$airquality = airquality::latest()->first();
+			//$airquality = airquality::latest()->first();
 			DB::connection()->getPdo()->commit();
 			return response()->json([
 				'result' => $airquality,	

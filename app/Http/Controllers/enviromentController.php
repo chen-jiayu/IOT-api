@@ -87,7 +87,7 @@ for($j=0 ; $j<$i ; $j++){
     $ThisDay = strtotime($today."+6 day");
     $CheckDay= date("Y-m-d",$ThisDay); 
 
-    $enviroment=DB::table('enviroments')->where('state_id', '=',$a)->where('district_id', '=',$b) ->whereBetween('day', [$today, $CheckDay])->select('state_id','district_id','day','time','temperature','atmospheric_pressure','wind_direction','wind_speed','wind_scale','wind_gust','air_quality','relative_humidity','weather','PoP6h','PoP12h','get_day','is_deleted')->get();
+    $enviroment=DB::table('enviroments')->where('state_id', '=',$a)->where('district_id', '=',$b) ->whereBetween('day', [$today, $CheckDay])->select('state_id','state','district_id','district','DAY','TIME','TEMP','WIND','WS','BF','Wx','PoP6h','PoP12h','get_day')->get();
 
 
     DB::connection()->getPdo()->commit();
