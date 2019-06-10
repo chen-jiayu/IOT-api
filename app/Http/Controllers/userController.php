@@ -26,7 +26,7 @@ class userController extends Controller
       if(!empty($id)){
        $user = user::find($id);
        $workspace=workspace::find($user->workspace_id);
-       if(empty($workspace)||empty($user)){
+       if(empty($user)){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -43,6 +43,7 @@ class userController extends Controller
           'message'=>'data not found'
         ]);
       }
+
       $result = array(
         'user_name' => $user->user_name,
         'mobile' => $user->mobile,
@@ -62,7 +63,8 @@ class userController extends Controller
         'result' => $result ,
         'status' => '1',
 
-      ]);}
+      ]);
+    }
       else
         $result = array(
           'user_name' => $user->user_name,
