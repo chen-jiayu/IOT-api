@@ -20,7 +20,7 @@ class loginController extends Controller
       //  $this->middleware('auth',['only' => 'create']);
 
         // 除了 index 之外都會先經過 auth 這個 middleware
-    $this->middleware('returnid',['except' => 'store']);
+    $this->middleware('returnid',['except' => ['store' ,'checktoken']]);
     
 
   }

@@ -37,6 +37,7 @@ class airqualityController extends Controller
 					continue;
 				}
              DB::table('airqualities')->where('TOWN', '=',$twon)->where('day', '=',$data[$j]["DAY"])->where('time', '=',$data[$j]["TIME"])->delete();
+             
 				$airquality=new airquality();
 				$airquality->AQI=$data[$j]["AQI"];
 				$airquality->CO=$data[$j]["CO"];

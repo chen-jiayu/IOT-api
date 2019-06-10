@@ -27,7 +27,7 @@ class rainfallController extends Controller
      for($j=0 ; $j<$i ; $j++){
       $city_id=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
       $twon_id= DB::table('districts')->where('district_name', '=',unicodeDecode($data[$j]["district"]))->value('id');
-        DB::table('enviroments')->where('district_id', '=',$twon_id)->where('DAY', '=',$data[$j]["DAY"])->where('TIME', '=',$data[$j]["TIME"])->delete();
+        DB::table('rainfalls')->where('TOWN', '=',$twon_id)->where('station_id', '=',$data[$j]["stationId"])->where('day', '=',$data[$j]["DAY"])->where('time', '=',$data[$j]["TIME"])->delete();
       if(empty($city_id)||empty($twon_id)){
         return response()->json([
           'status' => '0',
