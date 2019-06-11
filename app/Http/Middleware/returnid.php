@@ -30,15 +30,20 @@ class returnid
         $request->attributes->add(compact('remeber_token'));
         return $next($request);
     }
+    if($request->header('remeber_token'==NULL)){
+      return response()->json([
+            'status'=>'0',
+            'code'=>1,
+            'message'=> 'missing attribute'
+
+        ]);
+    }
 
     else
         return response()->json([
-
             'status'=>'0',
             'code'=>4,
             'message'=> 'token invalid'
-
-
         ]);
 
       //  return $next($request);

@@ -81,6 +81,7 @@ class workspacesController extends Controller
        $workspace->user_id= $id;
        $workspace->workspace_name= $request->input('workspace_name');
        $workspace->invite_code= $request->input('invite_code');
+       $workspace->status= '1';
        $workspace->save();
 
        $workspace_user = new workspace_user();
@@ -185,6 +186,13 @@ public function get(Request $request)
     $id=$request->get('remeber_token');
     if(!empty($id)){
       $workspace_id = DB::table('users')->where('id','=',$id)->value('workspace_id');
+      if(empty(DB::table('ponds')->where('workspace_id','=',$workspace_id)->value('id'))){
+        $work = DB::table('fields')
+      ->where('workspace_id', '=', $workspace_id)
+      ->select('id','field_name')
+      ->get();
+      }
+      else
       $work = DB::table('fields')
       ->where('fields.workspace_id', '=', $workspace_id)
       ->join('ponds', 'ponds.field_id', '=', 'fields.id')

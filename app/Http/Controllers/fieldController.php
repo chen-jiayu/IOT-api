@@ -23,7 +23,7 @@ class fieldController extends Controller
       DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
       if(!empty($id)){
-        if(DB::table('fields')->where('field_name', '=',$request->input('field_name'))==true){
+        if(!empty(DB::table('fields')->where('field_name', '=',$request->input('field_name'))->value('id'))){
           return response()->json([
             'status' => '0',
             'code'=>3,

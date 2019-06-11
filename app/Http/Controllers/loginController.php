@@ -87,6 +87,7 @@ class loginController extends Controller
        $user->user_name= $request->input('user_name');
        $user->mobile= $request->input('mobile');
        $user->email= $request->input('email');
+       $user->workspace_id= NULL;
        $user->citizen_id= $request->input('citizen_id');
        $user->password= bcrypt($request->input('password'));
        $user->id_token= $id_token;
