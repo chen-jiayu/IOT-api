@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\user;
 use App\workspace_user;
 use DB;
@@ -31,7 +32,7 @@ class loginController extends Controller
       $credentials = request(['citizen_id', 'password']);
       $id= DB::table('users')->where('citizen_id', '=',$request->input('citizen_id') )->value('id');
       $id_token= DB::table('users')->where('citizen_id', '=',$request->input('citizen_id') )->value('id_token');
-      if(!empty($id)){
+
         if (!$token = auth('api')->attempt($credentials)) {
           return response()->json([
             'status' => '0',
@@ -51,13 +52,7 @@ class loginController extends Controller
           'remember_token' => $token,
           'expires' => auth('api')->factory()->getTTL() * 60,
         ]);
-      }
-      else 
-        return response()->json([
-          'status' => '0',
-          'code'=>1,
-          'message'=>'missing attrs'
-        ]); 
+
     } catch (\PDOException $e) {
       DB::connection()->getPdo()->rollBack();
       return response()->json([
@@ -81,7 +76,8 @@ class loginController extends Controller
       'password'=>'required'
     ]); 
      DB::connection()->getPdo()->beginTransaction();
-     if(empty(DB::table('users')->where('citizen_id', '=',$request->input('citizen_id'))->value('citizen_id'))==true){
+     $count=DB::table('users')->where('citizen_id', '=',$request->input('citizen_id'))->count();
+     if($count== 0){
        $id_token=bcrypt($request->input('citizen_id'));
        $user = new user();
        $user->user_name= $request->input('user_name');
@@ -114,12 +110,12 @@ class loginController extends Controller
       ]);
     }
   }
-  public function storerem_token($id_token,$token) {
-    $id= DB::table('users')->where('id_token', '=',$id_token )->value('id');
-    $user = user::find($id);
-    $user->remeber_token=$token;
-    $user->save();
-  }
+  // public function storerem_token($id_token,$token) {
+  //   $id= DB::table('users')->where('id_token', '=',$id_token )->value('id');
+  //   $user = user::find($id);
+  //   $user->remeber_token=$token;
+  //   $user->save();
+  // }
   
 
     //修改資料
@@ -127,9 +123,11 @@ class loginController extends Controller
     try{
       DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
-      if(!empty($id)){
-        $user = User::find($id);
-        if(empty($user)){
+      $count=DB::table('users')->where('id', '=',$id)->count();
+      
+      $user = User::find($id);
+
+        if($count==0){
           return response()->json([
             'status' => '0',
             'code'=>2,
@@ -144,12 +142,7 @@ class loginController extends Controller
         return response()->json([
           'status' => '1'
         ]);
-      }  else
-      return response()->json([
-        'status' => '0',
-        'code'=>1,
-        'message'=>'missing attrs'
-      ]);
+     
     } catch (\PDOException $e) {
       DB::connection()->getPdo()->rollBack();
       return response()->json([
@@ -168,8 +161,8 @@ class loginController extends Controller
       DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
       $old=$request->input('oldpassword');
-      if(!empty($id)){
-        $user = User::find($id);
+      
+      $user = User::find($id);
         if(Hash::check($old,$user->password)){
         	$user->password = bcrypt($request->input('newpassword')); //舊密碼
         	$user->save();
@@ -185,13 +178,6 @@ class loginController extends Controller
             'message'=>'data not found'
           ]);
         }
-      }
-      else
-        return response()->json([
-          'status' => '0',
-          'code'=>1,
-          'message'=>'missing attrs'
-        ]);
     } catch (\PDOException $e) {
       DB::connection()->getPdo()->rollBack();
       return response()->json([

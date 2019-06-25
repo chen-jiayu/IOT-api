@@ -21,7 +21,7 @@ class stateController extends Controller
       $state_name=$data[$j]["city"];
      $state=new state();
      $state->id=$state_num;
-     if(!empty(state::find($state_num))){
+     if(count(state::find($state_num))!=0){
       return response()->json([
         'status' => '0',
         'code'=>3,
@@ -49,23 +49,23 @@ class stateController extends Controller
 public function get(Request $request) 
 {
   try {
-    DB::connection()->getPdo()->beginTransaction();
+    
    $states=DB::table('states')->select('id','state_name')->get();;
-   if(empty($states)){
+   if(count($states)==0){
      return response()->json([
       'status' => '0',
       'code'=>2,
       'message'=>'data not found'
     ]);
    }
-   DB::connection()->getPdo()->commit();
+   
    return response()->json([
     'result'=>$states,
     'status' => '1'
 
   ]);
  } catch (\PDOException $e) {
-  DB::connection()->getPdo()->rollBack();
+  
   return response()->json([
     'status' => '0',
     'code'=>0,

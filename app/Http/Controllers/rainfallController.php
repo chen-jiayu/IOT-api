@@ -15,11 +15,11 @@ class rainfallController extends Controller
   {
     function unicodeDecode($unicode_str)
     {
-    $json = '{"str":"'.$unicode_str.'"}';
-    $arr = json_decode($json,true);
-    if(empty($arr)) return '';
-    return $arr['str'];
-}
+      $json = '{"str":"'.$unicode_str.'"}';
+      $arr = json_decode($json,true);
+      if(empty($arr)) return '';
+      return $arr['str'];
+    }
     try{
      $data = $request->input('data');
      $i=count($data);
@@ -27,8 +27,8 @@ class rainfallController extends Controller
      for($j=0 ; $j<$i ; $j++){
       $city_id=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
       $twon_id= DB::table('districts')->where('district_name', '=',unicodeDecode($data[$j]["district"]))->value('id');
-        DB::table('rainfalls')->where('TOWN', '=',$twon_id)->where('station_id', '=',$data[$j]["stationId"])->where('day', '=',$data[$j]["DAY"])->where('time', '=',$data[$j]["TIME"])->delete();
-      if(empty($city_id)||empty($twon_id)){
+      DB::table('rainfalls')->where('TOWN', '=',$twon_id)->where('station_id', '=',$data[$j]["stationId"])->where('day', '=',$data[$j]["DAY"])->where('time', '=',$data[$j]["TIME"])->delete();
+      if(count($city_id)==0||count($twon_id)==0){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -71,7 +71,7 @@ class rainfallController extends Controller
 public function get(Request $request,$state_id,$district_id,$time) 
 {
   try{
-    DB::connection()->getPdo()->beginTransaction();
+    
     $rainfall=DB::table('rainfalls')->where('CITY', '=',$state_id)->where('TOWN', '=',$district_id)->where('DAY', '=',$time)->get();
     if(empty($rainfall)){
       return response()->json([
@@ -80,14 +80,14 @@ public function get(Request $request,$state_id,$district_id,$time)
         'message'=>'data not found'
       ]);
     }
-    DB::connection()->getPdo()->commit();
+   
     return response()->json([
       'result' => $rainfall,	
       'status' => '1'    
     ]);
 
   } catch (\PDOException $e) {
-    DB::connection()->getPdo()->rollBack();
+    
     return response()->json([
       'status' => '0',
       'code'=>0,

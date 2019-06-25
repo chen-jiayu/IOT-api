@@ -16,28 +16,28 @@ class enviromentController extends Controller
   {
 
     function unicodeDecode($unicode_str){
-    $json = '{"str":"'.$unicode_str.'"}';
-    $arr = json_decode($json,true);
-    if(empty($arr)) return '';
-    return $arr['str'];
-}
+      $json = '{"str":"'.$unicode_str.'"}';
+      $arr = json_decode($json,true);
+      if(empty($arr)) return '';
+      return $arr['str'];
+    }
     try{
       $data = $request->input('data');
       $i=count($data);
       DB::connection()->getPdo()->beginTransaction();
 
-for($j=0 ; $j<$i ; $j++){
+      for($j=0 ; $j<$i ; $j++){
         $city_id=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
         $twon_id= DB::table('districts')->where('district_name', '=',unicodeDecode($data[$j]["district"]))->value('id');
         DB::table('enviroments')->where('district_id', '=',$twon_id)->where('DAY', '=',$data[$j]["DAY"])->where('TIME', '=',$data[$j]["TIME"])->delete();
 
-        if(empty($city_id)||empty($twon_id)){
-        return response()->json([
-          'status' => '0',
-          'code'=>2,
-          'message'=>'data not found'
-        ]);
-      }
+        if(count($city_id)==0||count($twon_id)==0){
+          return response()->json([
+            'status' => '0',
+            'code'=>2,
+            'message'=>'data not found'
+          ]);
+        }
 
         $enviroment=new enviroment();
         $enviroment->state=$data[$j]["city"];
@@ -63,11 +63,11 @@ for($j=0 ; $j<$i ; $j++){
 
       ]);
       
-        return response()->json([
-          'status' => '0',
-          'code'=>1,
-          'message'=>'missing attrs'
-        ]);
+      return response()->json([
+        'status' => '0',
+        'code'=>1,
+        'message'=>'missing attrs'
+      ]);
     } catch (\PDOException $e) {
       DB::connection()->getPdo()->rollBack();
       return response()->json([
@@ -77,10 +77,10 @@ for($j=0 ; $j<$i ; $j++){
       ]);
     }
   }
-   
+
   public function get(Request $request,$a,$b,$c) 
   {
-    DB::connection()->getPdo()->beginTransaction();
+
     $id=$request->get('remeber_token');
     
     $today=$c;
@@ -90,7 +90,7 @@ for($j=0 ; $j<$i ; $j++){
     $enviroment=DB::table('enviroments')->where('state_id', '=',$a)->where('district_id', '=',$b) ->whereBetween('day', [$today, $CheckDay])->select('state_id','state','district_id','district','DAY','TIME','TEMP','WIND','WS','BF','Wx','PoP6h','PoP12h','get_day')->get();
 
 
-    DB::connection()->getPdo()->commit();
+    
     return response()->json([
       'result'=>$enviroment,
       'status' => '1'

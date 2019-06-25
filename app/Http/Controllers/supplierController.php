@@ -18,9 +18,9 @@ class supplierController extends Controller
     try{
       DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
-      if(!empty($id)){
+      
        $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
-       if(empty($workspace_id)){
+       if(count($workspace_id)!=0){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -43,13 +43,7 @@ class supplierController extends Controller
         'result'=>$supplier->id,
         'status' => '1'
       ]);
-    }else
-    return response()->json([
-      'status' => '0',
-      'code'=>1,
-      'message'=>'missing attrs'
-
-    ]);
+    
   } catch (\PDOException $e) {
     DB::connection()->getPdo()->rollBack();
     return response()->json([
@@ -60,37 +54,32 @@ class supplierController extends Controller
     ]);
   }
 }
- //取得廠商資料
+ //取得廠商列表
 public function gets(Request $request) 
 {
   try{
-    DB::connection()->getPdo()->beginTransaction();
+   
     $id=$request->get('remeber_token');
     $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
-    if(!empty($id)){
-      $supplier=DB::table('suppliers')->where('workspace_id', '=',$workspace_id)->select('id','workspace_id', 'supplier_type','supplier_name','contact_name_1','contact_phone_1','contact_name_2','contact_phone_2','address','note' )->get();
-      if(empty($supplier)){
+    $type=$request->input('supplier_type');
+
+      $supplier=DB::table('suppliers')->where('workspace_id', '=',$workspace_id)->where('supplier_type', '=',$type)->select('id','workspace_id', 'supplier_type','supplier_name','contact_name_1','contact_phone_1','contact_name_2','contact_phone_2','address','note' )->get();
+
+      if(count($supplier)==0){
         return response()->json([
           'status' => '0',
           'code'=>2,
           'message'=>'data not found'
         ]);
       }
-      DB::connection()->getPdo()->commit();
+      
       return response()->json([
         'result' => $supplier,
         'status' => '1'
       ]);
-    } else
-    DB::connection()->getPdo()->commit();
-    return response()->json([
-      'status' => '0',
-      'code'=>1,
-      'message'=>'missing attrs'
 
-    ]);
   } catch (\PDOException $e) {
-    DB::connection()->getPdo()->rollBack();
+   
     return response()->json([
       'status' => '0',
       'code'=>0,
@@ -103,11 +92,11 @@ public function gets(Request $request)
 public function get(Request $request,$supplier_id) 
 {
   try{
-    DB::connection()->getPdo()->beginTransaction();
+    
     $id=$request->get('remeber_token');
-    if(!empty($id)){
-      $supplier = supplier::find($supplier_id);
-      if(empty($supplier)){
+    
+    $supplier = supplier::find($supplier_id);
+      if(count($supplier)==0){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -117,6 +106,7 @@ public function get(Request $request,$supplier_id)
       $result=array(
         'workspace_id'=>$supplier->workspace_id,
         'supplier_name'=> $supplier->supplier_name,
+        'supplier_type'=>$supplier->supplier_type,
         'contact_name_1'=>$supplier->contact_name_1,
         'contact_phone_1'=> $supplier->contact_phone_1,
         'contact_name_2'=>$supplier->contact_name_2,
@@ -124,20 +114,14 @@ public function get(Request $request,$supplier_id)
         'address'=>$supplier->address,
         'note'=>$supplier->note
       );
-      DB::connection()->getPdo()->commit();
+      
       return response()->json([
         'result' => $result,
         'status' => '1'
       ]);
-      DB::connection()->getPdo()->commit();
-    return response()->json([
-      'status' => '0',
-      'code'=>1,
-      'message'=>'missing attrs'
-
-    ]);
-  } }catch (\PDOException $e) {
-    DB::connection()->getPdo()->rollBack();
+      
+   }catch (\PDOException $e) {
+    
     return response()->json([
       'status' => '0',
       'code'=>0,
@@ -153,9 +137,9 @@ public function put(Request $request,$supplier_id)
   try{
     DB::connection()->getPdo()->beginTransaction();
     $id=$request->get('remeber_token');
-    if(!empty($id)){
+    
      $supplier = supplier::find($supplier_id);
-     if(empty($supplier)){
+     if(count($supplier)==0){
       return response()->json([
         'status' => '0',
         'code'=>2,
@@ -175,13 +159,7 @@ public function put(Request $request,$supplier_id)
     return response()->json([
       'status' => '1'
     ]);
-  } else
-
-  return response()->json([
-    'status' => '0',
-    'code'=>1,
-    'message'=>'missing attrs'
-  ]);
+  
 } catch (\PDOException $e) {
   DB::connection()->getPdo()->rollBack();
   return response()->json([

@@ -22,7 +22,7 @@ class districtController extends Controller
 			
 			$district=new district();
 			$district->id=$district_num;
-			if(!empty(district::find($district_num))){
+			if(count(district::find($district_num))!=0){
 				return response()->json([
 					'status' => '0',
 					'code'=>3,
@@ -48,7 +48,7 @@ class districtController extends Controller
 	public function get(Request $request,$state_id) 
 	{
 		try {
-			DB::connection()->getPdo()->beginTransaction();
+			
 			$x = strlen($state_id);
 			if($x==3){
 				$districts = DB::table('districts')->where(\DB::raw('SUBSTRING(id, 1, 3)'),'=',$state_id)->select('id','district_name')->get();
@@ -60,20 +60,20 @@ class districtController extends Controller
 				$districts = DB::table('districts')->where(\DB::raw('SUBSTRING(id, 1, 5)'),'=',$state_id)->select('id','district_name')->get();
 			}			
 		//$districts=DB::table('districts')->select('id','district_name')->get();
-			if(empty($districts)){
+			if(count($districts)==0){
 				return response()->json([
 					'status' => '0',
 					'code'=>2,
 					'message'=>'data not found'
 				]);
 			}
-			DB::connection()->getPdo()->commit();
+			
 			return response()->json([
 				'result'=>$districts,
 				'status' => '1'
 			]);
 		} catch (\PDOException $e) {
-			DB::connection()->getPdo()->rollBack();
+		
 			return response()->json([
 				'status' => '0',
 				'code'=>0,

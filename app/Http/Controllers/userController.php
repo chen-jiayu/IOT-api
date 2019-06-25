@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
 use App\user;
 use App\workspace_user;
 use App\workspace;
@@ -21,12 +22,12 @@ class userController extends Controller
   public function show(Request $request) 
   {    
     try{
-      DB::connection()->getPdo()->beginTransaction();
+      
       $id=$request->get('remeber_token');
-      if(!empty($id)){
+
        $user = user::find($id);
        $workspace=workspace::find($user->workspace_id);
-       if(empty($user)){
+       if(count($user)==0&&count($workspace==0)){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -36,7 +37,7 @@ class userController extends Controller
       if(!empty($workspace->id)){
        $role_id= DB::table('workspace_users')->where('workspace_id', '=',$workspace->id)->value('role_id');
        $user_role=user_role::find($role_id);
-       if(empty($role_id)){
+       if(count($role_id)==0){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -58,7 +59,7 @@ class userController extends Controller
           'status' => $workspace->status
         )
       ); 
-     // DB::connection()->getPdo()->commit();   
+    
       return response()->json([
         'result' => $result ,
         'status' => '1',
@@ -72,19 +73,14 @@ class userController extends Controller
           'email' => $user->email,
           'workspace'=>'null'
         );
-      DB::connection()->getPdo()->commit();
+     
       return response()->json([
         'result' => $result ,
         'status' => '1'
       ]);
-    } else
-    return response()->json([
-      'status' => '0',
-      'code'=>1,
-      'message'=>'missing attrs'
-    ]);
+    
   } catch (\PDOException $e) {
-    DB::connection()->getPdo()->rollBack();
+   
     return response()->json([
       'status' => '0',
       'code'=>0,
@@ -96,21 +92,19 @@ class userController extends Controller
 public function showworkspace(Request $request) 
 {   
   try{
-    DB::connection()->getPdo()->beginTransaction();
+   
     $id=$request->get('remeber_token');
-    if(!empty($id)){
-      $user = DB::table('workspace_users')
-      ->select('user_id')
-      ->get();
-      if(Arr::has($user, $id)==true){
+    
+    $user= DB::table('workspace_users')->where('user_id', '=',$id)->get();
+      
+      if(count($user)!=0){
         $users = DB::table('workspace_users')
         ->join('workspaces', 'workspace_users.workspace_id', '=', 'workspaces.id')
         ->where('workspace_users.user_id', '=', $id)
         ->join('users', 'users.id', '=', 'workspaces.user_id')
-        ->select('workspaces.workspace_name', 'users.user_name','workspace_users.workspace_id')
+        ->select('workspaces.workspace_name','workspace_users.workspace_id')
         ->get();
 
-        DB::connection()->getPdo()->commit();
         return response()->json([
           'result' => $users,
           'status' => '1'
@@ -120,15 +114,9 @@ public function showworkspace(Request $request)
           'code'=>2,
           'message'=>'data not found'
         ]);
-      }
-      else
-        return response()->json([
-          'status' => '0',
-          'code'=>1,
-          'message'=>'missing attrs'
-        ]);
+      
     } catch (\PDOException $e) {
-      DB::connection()->getPdo()->rollBack();
+      
       return response()->json([
         'status' => '0',
         'code'=>0,

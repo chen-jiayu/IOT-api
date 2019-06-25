@@ -21,7 +21,6 @@ class pondshrimpController extends Controller
   {
     try {
       $id=$request->get('remeber_token');
-      if(!empty($id)){
        $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
        $state_id=DB::table('fields')->where('id', '=',$request->input('field_id') )->value('state_id');
        DB::connection()->getPdo()->beginTransaction();
@@ -49,15 +48,7 @@ class pondshrimpController extends Controller
         'status' => '1'
 
       ]);
-     }
-     else
-      return response()->json([
-        'status' => '0',
-        'code'=>1,
-        'message'=>'missing attrs'
-
-      ]);
-
+     
   } catch (\PDOException $e) {
     DB::connection()->getPdo()->rollBack();
     return response()->json([
