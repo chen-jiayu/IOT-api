@@ -69,7 +69,7 @@ Route::get('field_feed/{field_feed_id}', 'field_feedController@get');
 Route::post('field_feed_log', 'field_feed_logController@store');
 Route::put('field_feed_log/{field_feed_log_id}', 'field_feed_logController@put');
 Route::get('field_feed_log/{field_feed_log_id}', 'field_feed_logController@get');
-Route::get('field_feed_logs', 'field_feed_logController@gets');
+Route::get('field_feed_logs/{field_id}', 'field_feed_logController@gets');
 //daily_note
 Route::post('daily_note', 'daily_noteController@store');
 Route::put('daily_note/{note_id}', 'daily_noteController@put');

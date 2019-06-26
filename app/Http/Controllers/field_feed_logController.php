@@ -41,9 +41,11 @@ class field_feed_logController extends Controller
         field_feed::find($request->input('feed_id'))->increment('inventory_weight',$request->input('inventory_weight'));
       }
       if($request->input('source_type')==2){
-        $field_feed_log->daily_note_id=$request->input('where_id');
+        $field_feed_log->daily_note_id=$request->input('daily_note_id');
       }
       $field_feed_log->inventory_weight=$request->input('inventory_weight');
+      $field_feed_log->created_id=$id;
+
       $field_feed_log->save();
       DB::connection()->getPdo()->commit();
       return response()->json([
@@ -138,12 +140,12 @@ class field_feed_logController extends Controller
       ]);
     }
   }
-  public function gets(Request $request) 
+  public function gets(Request $request,$field_id) 
   {
     try {
 
       $id=$request->get('remeber_token');
-      $result=DB::table('field_feed_logs')->select('id','workspace_id','source_type','field_id','daily_note_id',
+      $result=DB::table('field_feed_logs')->where('field_id', '=',$field_id )->select('id','workspace_id','source_type','field_id','daily_note_id',
         'feed_id','inventory_weight')->get();
       if(count($result)==0){
         return response()->json([

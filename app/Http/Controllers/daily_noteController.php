@@ -149,9 +149,8 @@ public function gets(Request $request)
  try{
    $id=$request->get('remeber_token');
    
-   $daily_note=DB::table('daily_notes')->where('pond_id', '=',$request->input('pond_id'))->get();
-   // select('id','workspace_id','field_id','field_id','pond_id',
-   //  'feed_id','note_date','feeding_wieght','eating_duration','note')
+   $daily_note=DB::table('daily_notes')->where('pond_id', '=',$request->input('pond_id'))->orderBy('note_date', 'desc')->get();
+   
    if(count($daily_note)==0){
     return response()->json([
       'status' => '0',
@@ -178,10 +177,9 @@ public function gets(Request $request)
      'updated_id'=>$user
      )
    ;
-    // $feed=[];
-    // $user=[];
+    
   };
- // $result=arra
+
 
   return response()->json([
     'result'=>$result,
