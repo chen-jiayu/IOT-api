@@ -18,14 +18,14 @@ class CreateFieldsTable extends Migration
             $table->string('state_id', 20)->default('');
             $table->foreign('state_id')->references('id')->on('states');
 
-            $table->integer('workspace_id')->unsigned()->nullable();
+            $table->integer('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             
             $table->string('field_name', 20)->default('');
-            $table->string('field_position', 20)->default('');
+            $table->string('field_position', 20)->default('')->nullable();
             $table->integer('created_id')->nullable();
             $table->integer('updated_id')->nullable();
-            $table->tinyInteger('is_deleted')->default(0);
+            $table->tinyInteger('is_deleted')->default(0)->nullable();
             $table->timestamps();
         });
     }

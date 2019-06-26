@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class user extends Authenticatable implements JWTSubject
 {
    
-    // protected $fillable = ['user_name', 'workspace_id','mobile', 'email', 'citizen_id','password', 'remeber_token','id_token'];
+   // $fillable = ['user_name', 'citizen_id','password'];
 
     public function workspace_user()
     {

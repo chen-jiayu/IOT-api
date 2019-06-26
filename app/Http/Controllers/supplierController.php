@@ -19,8 +19,8 @@ class supplierController extends Controller
       DB::connection()->getPdo()->beginTransaction();
       $id=$request->get('remeber_token');
       
-       $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
-       if(count($workspace_id)!=0){
+      $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
+      if(count($workspace_id)==0){
         return response()->json([
           'status' => '0',
           'code'=>2,
@@ -43,25 +43,25 @@ class supplierController extends Controller
         'result'=>$supplier->id,
         'status' => '1'
       ]);
-    
-  } catch (\PDOException $e) {
-    DB::connection()->getPdo()->rollBack();
-    return response()->json([
-      'status' => '0',
-      'code'=>0,
-      'message'=>$e->getMessage()
 
-    ]);
+    } catch (\PDOException $e) {
+      DB::connection()->getPdo()->rollBack();
+      return response()->json([
+        'status' => '0',
+        'code'=>0,
+        'message'=>$e->getMessage()
+
+      ]);
+    }
   }
-}
  //取得廠商列表
-public function gets(Request $request) 
-{
-  try{
-   
-    $id=$request->get('remeber_token');
-    $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
-    $type=$request->input('supplier_type');
+  public function gets(Request $request) 
+  {
+    try{
+
+      $id=$request->get('remeber_token');
+      $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
+      $type=$request->input('supplier_type');
 
       $supplier=DB::table('suppliers')->where('workspace_id', '=',$workspace_id)->where('supplier_type', '=',$type)->select('id','workspace_id', 'supplier_type','supplier_name','contact_name_1','contact_phone_1','contact_name_2','contact_phone_2','address','note' )->get();
 
@@ -78,24 +78,24 @@ public function gets(Request $request)
         'status' => '1'
       ]);
 
-  } catch (\PDOException $e) {
-   
-    return response()->json([
-      'status' => '0',
-      'code'=>0,
-      'message'=>$e->getMessage()
+    } catch (\PDOException $e) {
 
-    ]);
+      return response()->json([
+        'status' => '0',
+        'code'=>0,
+        'message'=>$e->getMessage()
+
+      ]);
+    }
   }
-}
 
-public function get(Request $request,$supplier_id) 
-{
-  try{
-    
-    $id=$request->get('remeber_token');
-    
-    $supplier = supplier::find($supplier_id);
+  public function get(Request $request,$supplier_id) 
+  {
+    try{
+
+      $id=$request->get('remeber_token');
+
+      $supplier = supplier::find($supplier_id);
       if(count($supplier)==0){
         return response()->json([
           'status' => '0',
@@ -120,54 +120,54 @@ public function get(Request $request,$supplier_id)
         'status' => '1'
       ]);
       
-   }catch (\PDOException $e) {
-    
-    return response()->json([
-      'status' => '0',
-      'code'=>0,
-      'message'=>$e->getMessage()
+    }catch (\PDOException $e) {
 
-    ]);
-  }
-}
-
-    //場商修改
-public function put(Request $request,$supplier_id) 
-{
-  try{
-    DB::connection()->getPdo()->beginTransaction();
-    $id=$request->get('remeber_token');
-    
-     $supplier = supplier::find($supplier_id);
-     if(count($supplier)==0){
       return response()->json([
         'status' => '0',
-        'code'=>2,
-        'message'=>'data not found'
+        'code'=>0,
+        'message'=>$e->getMessage()
+
       ]);
     }
-    $supplier->supplier_name=$request->input('supplier_name');
-    $supplier->contact_name_1=$request->input('contact_name_1');
-    $supplier->contact_phone_1=$request->input('contact_phone_1');
-    $supplier->contact_name_2=$request->input('contact_name_2');
-    $supplier->contact_phone_2=$request->input('contact_phone_2');
-    $supplier->address=$request->input('address');
-    $supplier->note=$request->input('note');
-    $supplier->save();
+  }
 
-    DB::connection()->getPdo()->commit();
-    return response()->json([
-      'status' => '1'
-    ]);
-  
-} catch (\PDOException $e) {
-  DB::connection()->getPdo()->rollBack();
-  return response()->json([
-    'status' => '0',
-    'code'=>0,
-    'message'=>$e->getMessage()
+    //場商修改
+  public function put(Request $request,$supplier_id) 
+  {
+    try{
+      DB::connection()->getPdo()->beginTransaction();
+      $id=$request->get('remeber_token');
 
-  ]);
-}
-}
+      $supplier = supplier::find($supplier_id);
+      if(count($supplier)==0){
+        return response()->json([
+          'status' => '0',
+          'code'=>2,
+          'message'=>'data not found'
+        ]);
+      }
+      $supplier->supplier_name=$request->input('supplier_name');
+      $supplier->contact_name_1=$request->input('contact_name_1');
+      $supplier->contact_phone_1=$request->input('contact_phone_1');
+      $supplier->contact_name_2=$request->input('contact_name_2');
+      $supplier->contact_phone_2=$request->input('contact_phone_2');
+      $supplier->address=$request->input('address');
+      $supplier->note=$request->input('note');
+      $supplier->save();
+
+      DB::connection()->getPdo()->commit();
+      return response()->json([
+        'status' => '1'
+      ]);
+
+    } catch (\PDOException $e) {
+      DB::connection()->getPdo()->rollBack();
+      return response()->json([
+        'status' => '0',
+        'code'=>0,
+        'message'=>$e->getMessage()
+
+      ]);
+    }
+  }
 }

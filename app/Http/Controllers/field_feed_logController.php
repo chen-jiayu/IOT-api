@@ -37,8 +37,8 @@ class field_feed_logController extends Controller
       $field_feed_log->field_id=$request->input('field_id');
       $field_feed_log->source_type=$request->input('source_type');
       if($request->input('source_type')==1){
-        $field_feed_log->feed_id=$request->input('where_id');
-        field_feed::find($request->input('where_id'))->increment('inventory_weight',$request->input('inventory_weight'));
+        $field_feed_log->feed_id=$request->input('feed_id');
+        field_feed::find($request->input('feed_id'))->increment('inventory_weight',$request->input('inventory_weight'));
       }
       if($request->input('source_type')==2){
         $field_feed_log->daily_note_id=$request->input('where_id');

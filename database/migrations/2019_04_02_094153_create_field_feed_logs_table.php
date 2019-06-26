@@ -17,14 +17,14 @@ class CreateFieldFeedLogsTable extends Migration
             $table->increments('id');
             $table->integer('workspace_id')->unsigned()->default(0);
             $table->foreign('workspace_id')->references('id')->on('workspaces');
-            $table->tinyInteger('source_type')->default(0)->nullable();
+            $table->tinyInteger('source_type')->default(0);
 
             $table->integer('field_id')->unsigned()->default(0);
             $table->foreign('field_id')->references('id')->on('fields');
 
-            $table->integer('daily_note_id')->unsigned()->nullable();
+            $table->integer('daily_note_id')->unsigned();
             $table->foreign('daily_note_id')->references('id')->on('daily_notes');
-            $table->integer('feed_id')->unsigned()->nullable();
+            $table->integer('feed_id')->unsigned();
             $table->foreign('feed_id')->references('id')->on('field_feeds');
             $table->decimal('inventory_weight', 8, 2)->default(0)->nullable();
             $table->integer('created_id')->nullable();

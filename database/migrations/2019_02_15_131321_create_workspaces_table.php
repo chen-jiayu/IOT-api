@@ -18,9 +18,9 @@ class CreateWorkspacesTable extends Migration
             $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('workspace_name', 20)->default(' ');
-            $table->string('invite_code', 20)->default(' ');
-            $table->tinyInteger('status')->default(0);
-            $table->tinyInteger('is_deleted')->default(0);
+            $table->string('invite_code', 20)->default(' ')->nullable();
+            $table->tinyInteger('status')->default(0)->nullable();
+            $table->tinyInteger('is_deleted')->default(0)->nullable();
             $table->timestamps();
             $table->integer('created_id')->nullable();
             $table->integer('updated_id')->nullable();

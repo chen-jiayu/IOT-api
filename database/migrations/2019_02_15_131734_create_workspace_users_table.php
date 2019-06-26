@@ -14,13 +14,13 @@ class CreateWorkspaceUsersTable extends Migration
     public function up()
     {
         Schema::create('workspace_users', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->integer('workspace_id')->unsigned()->nullable();
+            $table->integer('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             
-            $table->integer('role_id')->unsigned()->nullable();
+            $table->integer('role_id')->unsigned();
             $table->foreign('role_id')->references('id')->on('user_roles');
             $table->primary(['workspace_id', 'user_id']);
             $table->tinyInteger('status')->default(1)->nullable();

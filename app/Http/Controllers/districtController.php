@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\district;
 use App\state;
 use DB;
@@ -17,11 +18,11 @@ class districtController extends Controller
 			$i=count($data);
             DB::connection()->getPdo()->beginTransaction();
 			for($j=0 ; $j<$i ; $j++){
-			$district_num=$data[$j]["district"];
-			$district_name=$data[$j]["d-id"];
+			// $district_num=$data[$j]["district"];
+			$city=$data[$j]["c-id"];
 			
 			$district=new district();
-			$district->id=$district_num;
+			$district->id=$data[$j]["district"];
 			if(count(district::find($district_num))!=0){
 				return response()->json([
 					'status' => '0',
@@ -29,7 +30,11 @@ class districtController extends Controller
 					'message'=>'data duplicate'
 				]);
 			}
-			$district->district_name=$district_name;
+			if(Str::startsWith($city, 0)){
+               $city=substr($city,1);
+			}
+			$district->state_id=$city;
+			$district->district_name=$data[$j]["d-id"];
 			$district->save();
 		}
 			DB::connection()->getPdo()->commit();

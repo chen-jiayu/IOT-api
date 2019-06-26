@@ -71,7 +71,7 @@ class userController extends Controller
           'user_name' => $user->user_name,
           'mobile' => $user->mobile,
           'email' => $user->email,
-          'workspace'=>'null'
+          'workspace'=>''
         );
      
       return response()->json([

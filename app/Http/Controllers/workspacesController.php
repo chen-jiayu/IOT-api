@@ -167,11 +167,9 @@ public function get(Request $request)
   try{
 
     $id=$request->get('remeber_token');
-
     $workspace_id = DB::table('users')->where('id','=',$id)->value('workspace_id');
     $field_id = DB::table('fields')->where('workspace_id','=',$workspace_id)->get();
-    //$count=DB::table('ponds')->where('workspace_id','=',$workspace_id)->count();
-
+    
     if(count($field_id)==0){
       return response()->json([
         'status' => '0',
@@ -179,54 +177,31 @@ public function get(Request $request)
         'message'=>'data not found'
       ]);
     }
-    
-
     $i=count($field_id);
 
     for($j=0 ; $j<$i ; $j++){
       $field=field::find($field_id[$j]->id);  
-      $pond_id = DB::table('ponds')->where('field_id','=',$field_id[$j]->id)->get(); 
+      $pond_id = DB::table('ponds')->where('field_id','=',$field_id[$j]->id)->select('id','pond_name')->get(); 
       $i2=count($pond_id);
-      for($j2=0 ; $j2<$i2 ; $j2++){
-       $pond=pond::find($pond_id[$j2]->id);
-       $result1[$j2]=array(
-         'pond_name'=> $pond->pond_name,
-         'pond_id'=> $pond->id,
-         'is_closed'=> $pond->is_closed
-       );
-     } ;
+     
      $result[$j]=array(
        'field_name'=> $field->field_name,
        'field_id'=> $field->id,
-       'pond'=>$result1);
-     if($j!=$i-1){
-     $result1=null;
+       'pond'=>$pond_id);
+  
    }
-     };
+   return response()->json([
+    'result' => $result,
+    'status' => '1'
+  ]); 
 
-    // $work = DB::table('fields')
-    // ->where('workspace_id', '=', $workspace_id)
-    // ->select('id','field_name')
-    // ->get();
 
-    // $work = DB::table('fields')
-    // ->where('fields.workspace_id', '=', $workspace_id)
-    // ->join('ponds', 'ponds.field_id', '=', 'fields.id')
-    // ->select('ponds.field_id','fields.field_name','ponds.id','ponds.pond_name')
-    // ->get(); 
-
-     return response()->json([
-      'result' => $result,
-      'status' => '1'
-    ]); 
-
-   } catch (\PDOException $e) {
-
-    return response()->json([
-      'status' => '0',
-      'code'=>0,
-      'message'=>$e->getMessage()
-    ]);
-  }
+ } catch (\PDOException $e) {
+  return response()->json([
+    'status' => '0',
+    'code'=>0,
+    'message'=>$e->getMessage()
+  ]);
+}
 }
 }

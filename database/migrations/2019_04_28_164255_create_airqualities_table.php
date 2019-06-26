@@ -35,8 +35,8 @@ class CreateAirqualitiesTable extends Migration
             $table->string('PM2_5_AVG',20)->nullable();
             $table->string('Pollutant',20)->nullable();
             $table->string('status',20)->nullable();
-            $table->dateTime('day');
-            $table->time('time');
+            $table->dateTime('day')->nullable();
+            $table->time('time')->nullable();
             $table->string('SO2',20)->nullable();
             $table->string('SO2_AVG',20)->nullable();
             $table->timestamps();

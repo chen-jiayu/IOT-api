@@ -16,13 +16,13 @@ class CreateRainfallsTable extends Migration
         Schema::create('rainfalls', function (Blueprint $table) {
             $table->increments('id');
             $table->string('station_id')->nullable();
-            $table->string('locationName',20);
+            $table->string('locationName',20)->nullable();
             $table->string('CITY',20);
             $table->foreign('CITY')->references('id')->on('states');
             $table->string('TOWN',20);
             $table->foreign('TOWN')->references('id')->on('districts');
-            $table->dateTime('day');
-            $table->time('time');
+            $table->dateTime('day')->nullable();
+            $table->time('time')->nullable();
             $table->decimal('ELEV', 5, 2)->nullable();
             $table->decimal('RAIN', 5, 2)->nullable();
             $table->decimal('MIN_10', 5, 2)->nullable();
@@ -31,7 +31,7 @@ class CreateRainfallsTable extends Migration
             $table->decimal('HOUR_12', 5, 2)->nullable();
             $table->decimal('HOUR_24', 5, 2)->nullable();
             $table->decimal('NOW', 5, 2)->nullable();
-            $table->string('ATTRIBUTE',20);
+            $table->string('ATTRIBUTE',20)->nullable();
             
             $table->timestamps();
         });

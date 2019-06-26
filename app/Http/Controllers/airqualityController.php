@@ -31,7 +31,8 @@ class airqualityController extends Controller
 				
 				$city=DB::table('states')->where('state_name', '=',unicodeDecode($data[$j]["city"]))->value('id');
 				$twon = DB::table('districts')->where(\DB::raw('SUBSTRING(district_name, 1, 2)'),'=',unicodeDecode($data[$j]["district"]))->value('id');
-				//echo $twon;
+				
+				//echo $city;
                 //$t=unicodeDecode($data[$j]["district"]);
 				if(empty($twon)){
 					continue;

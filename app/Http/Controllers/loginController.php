@@ -68,13 +68,13 @@ class loginController extends Controller
   public function store(Request $request)   
   {
     try {
-     $this->validate($request,[
-      'user_name'=>'required',
-      'mobile'=>'required',
-      'email'=>'required',
-      'citizen_id'=>'required',
-      'password'=>'required'
-    ]); 
+    //  $this->validate($request,[
+    //   'user_name'=>'required',
+    //   'mobile'=>'required',
+    //   'email'=>'required',
+    //   'citizen_id'=>'required',
+    //   'password'=>'required'
+    // ]); 
      DB::connection()->getPdo()->beginTransaction();
      $count=DB::table('users')->where('citizen_id', '=',$request->input('citizen_id'))->count();
      if($count== 0){

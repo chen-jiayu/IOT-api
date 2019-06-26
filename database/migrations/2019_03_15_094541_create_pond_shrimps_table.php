@@ -15,14 +15,14 @@ class CreatePondShrimpsTable extends Migration
     {
         Schema::create('pond_shrimps', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('workspace_id')->unsigned()->default(0);
+            $table->integer('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->integer('field_id')->unsigned()->default(0);
             $table->foreign('field_id')->references('id')->on('fields');
             $table->integer('pond_id')->unsigned()->default(0);
             $table->foreign('pond_id')->references('id')->on('ponds');
-            $table->string('state_id',20);
-            $table->foreign('state_id')->references('id')->on('states');
+            $table->integer('supplier_id')->unsigned()->default(0);
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->string('babysprimp', 20)->default('')->nullable();
             $table->string('shrimp_type', 20)->default('')->nullable();
             $table->decimal('number', 7, 3)->default(0)->nullable();

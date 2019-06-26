@@ -24,11 +24,11 @@ class CreateDailyNotesTable extends Migration
             $table->integer('feed_id')->unsigned();
             $table->foreign('feed_id')->references('id')->on('field_feeds');
             $table->dateTime('note_date')->nullable();
-           $table->timestamp('feeding_time');
+           $table->timestamp('feeding_time')->nullable();
             $table->decimal('feeding_wieght', 8, 2)->nullable();
             $table->integer('eating_duration')->nullable();
-            $table->string('note',200);
-            $table->tinyInteger('is_deleted')->default(0);
+            $table->string('note',200)->nullable();
+            $table->tinyInteger('is_deleted')->default(0)->nullable();
             $table->integer('created_id')->nullable();
             $table->integer('updated_id')->nullable();
             $table->timestamps();
