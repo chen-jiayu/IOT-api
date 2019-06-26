@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class field extends Model
 {
-	protected $fillable = ['workspace_id','field_name','field_position','state_id'];
+	//protected $fillable = ['workspace_id','field_name','field_position','state_id'];
     
     public function pond()
     {

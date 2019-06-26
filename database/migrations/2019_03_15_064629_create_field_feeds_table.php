@@ -21,10 +21,10 @@ class CreateFieldFeedsTable extends Migration
             $table->foreign('field_id')->references('id')->on('fields');
             $table->integer('supplier_id')->unsigned()->default(0);
             $table->foreign('supplier_id')->references('id')->on('suppliers');
-            $table->string('feed_size', 20)->default('');
-            $table->decimal('inventory_weight', 8, 2)->default(0);
-            $table->decimal('inventory_min', 8, 2)->default(0);
-            $table->tinyInteger('is_deleted')->default(0);
+            $table->string('feed_size', 20)->default('')->nullable();
+            $table->decimal('inventory_weight', 8, 2)->default(0)->nullable();
+            $table->decimal('inventory_min', 8, 2)->default(0)->nullable();
+            $table->tinyInteger('is_deleted')->default(0)->nullable();
             $table->integer('created_id')->nullable();
             $table->integer('updated_id')->nullable();
             $table->timestamps();

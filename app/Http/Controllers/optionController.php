@@ -28,6 +28,8 @@ class optionController extends Controller
 				$option->workspace_id=$workspace_id;
 				$option->opt_id=$request->input('opt_id');
 				$option->opt_value=$request->input('opt_value');
+				$option->created_id=$id;
+				$option->updated_id=$id;
 				$option->save();
 
 				DB::connection()->getPdo()->commit();

@@ -20,12 +20,12 @@ class CreatePondsTable extends Migration
             $table->integer('field_id')->unsigned()->nullable();
             $table->foreign('field_id')->references('id')->on('fields');
             $table->string('pond_name', 20)->default('');
-            $table->decimal('long', 5, 2)->default(0);
-            $table->decimal('depth', 5, 2)->default(0);
-            $table->decimal('width', 5, 2)->default(0);
-            $table->integer('waterwheel')->default(0);
-            $table->tinyInteger('is_closed')->default(0);
-            $table->tinyInteger('is_deleted')->default(0);
+            $table->decimal('long', 5, 2)->default(0)->nullable();
+            $table->decimal('depth', 5, 2)->default(0)->nullable();
+            $table->decimal('width', 5, 2)->default(0)->nullable();
+            $table->integer('waterwheel')->default(0)->nullable();
+            $table->tinyInteger('is_closed')->default(0)->nullable();
+            $table->tinyInteger('is_deleted')->default(0)->nullable();
             $table->integer('created_id')->nullable();
             $table->integer('updated_id')->nullable();
             $table->timestamps();

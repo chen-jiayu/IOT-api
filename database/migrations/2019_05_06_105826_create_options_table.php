@@ -18,6 +18,7 @@ class CreateOptionsTable extends Migration
             $table->foreign('workspace_id')->references('id')->on('workspaces');
             $table->string('opt_id',20);
             $table->string('opt_value',20);
+            $table->primary(['workspace_id', 'opt_id','opt_value']);
             $table->tinyInteger('is_deleted')->default(0);
             $table->integer('created_id')->nullable();
             $table->integer('updated_id')->nullable();
