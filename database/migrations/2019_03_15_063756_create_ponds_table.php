@@ -15,9 +15,9 @@ class CreatePondsTable extends Migration
     {
         Schema::create('ponds', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('workspace_id')->unsigned()->nullable();
+            $table->integer('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
-            $table->integer('field_id')->unsigned()->nullable();
+            $table->integer('field_id')->unsigned();
             $table->foreign('field_id')->references('id')->on('fields');
             $table->string('pond_name', 20)->default('');
             $table->decimal('long', 5, 2)->default(0)->nullable();

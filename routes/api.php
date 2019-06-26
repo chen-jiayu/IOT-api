@@ -62,6 +62,7 @@ Route::post('pondshrimp', 'pondshrimpController@store');
 Route::put('pondshrimp/{pond_id}', 'pondshrimpController@put');
 //field_feed
 Route::post('field_feed', 'field_feedController@store');
+Route::get('field_feed/{field_id}', 'field_feedController@gets');
 //Route::put('field_feed/{field_feed_id}', 'field_feedController@put');
 Route::get('field_feed/{field_feed_id}', 'field_feedController@get');
 //field_feed_log

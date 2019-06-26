@@ -20,9 +20,9 @@ class pondshrimpController extends Controller
   public function store(Request $request) 
   {
     try {
-      $id=$request->get('remeber_token');
+       $id=$request->get('remeber_token');
        $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
-       $state_id=DB::table('fields')->where('id', '=',$request->input('field_id') )->value('state_id');
+      // $state_id=DB::table('fields')->where('id', '=',$request->input('field_id') )->value('state_id');
        DB::connection()->getPdo()->beginTransaction();
        DB::table('pond_shrimps')
        ->where('workspace_id', '=',$workspace_id)
@@ -32,7 +32,7 @@ class pondshrimpController extends Controller
        $pond_shrimp->workspace_id=$workspace_id;
        $pond_shrimp->field_id=$request->input('field_id');
        $pond_shrimp->pond_id=$request->input('pond_id');
-       $pond_shrimp->state_id=$state_id;
+       $pond_shrimp->supplier_id=$request->input('supplier_id');
        $pond_shrimp->babysprimp=$request->input('babysprimp');
        $pond_shrimp->density=$request->input('density');
        $pond_shrimp->note=$request->input('note');
@@ -63,11 +63,11 @@ class pondshrimpController extends Controller
 public function put(Request $request,$pond_id) 
 {
  try{
-   $id=$request->get('remeber_token');
-   if(!empty($id)){
+    $id=$request->get('remeber_token');
+   
     $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
     $pond = pond::find($pond_id);
-    if(empty($pond)){
+    if(count($pond)==0){
       return response()->json([
         'status' => '0',
         'code'=>2,
@@ -92,14 +92,7 @@ public function put(Request $request,$pond_id)
         'status' => '1'
       ]);
     }
-  }
-  else
-      return response()->json([
-        'status' => '0',
-        'code'=>1,
-        'message'=>'missing attrs'
-        
-      ]);
+ 
 } catch (\PDOException $e) {
   DB::connection()->getPdo()->rollBack();
   return response()->json([

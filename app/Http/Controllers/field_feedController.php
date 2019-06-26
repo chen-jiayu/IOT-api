@@ -127,4 +127,35 @@ public function get(Request $request,$field_feed_id)
     ]);
   }
 }
+//field_feed列表
+public function gets(Request $request,$field_id) 
+{
+  try {
+    
+    $id=$request->get('remeber_token');
+    $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
+    $field_feed = DB::table('field_feeds')->where('workspace_id', '=',$workspace_id )->where('field_id', '=',$field_id)->select('id','workspace_id','field_id','supplier_id','feed_size','inventory_weight','inventory_min','created_id','updated_id')->get();
+    if(count($field_feed)==0){
+      return response()->json([
+        'status' => '0',
+        'code'=>2,
+        'message'=>'data not found'
+      ]);
+    }
+    
+    return response()->json([
+      'result'=>$field_feed,
+      'status' => '1'
+
+    ]);
+    
+  } catch (\PDOException $e) {
+    
+    return response()->json([
+      'status' => '0',
+      'code'=>0,
+      'message'=>$e->getMessage()
+    ]);
+  }
+}
 }

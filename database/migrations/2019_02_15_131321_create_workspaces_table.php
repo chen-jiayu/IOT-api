@@ -15,10 +15,10 @@ class CreateWorkspacesTable extends Migration
     {
         Schema::create('workspaces', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('workspace_name', 20)->default(' ');
-            $table->string('invite_code', 20)->default(' ')->nullable();
+            $table->string('invite_code', 20)->default(' ');
             $table->tinyInteger('status')->default(0)->nullable();
             $table->tinyInteger('is_deleted')->default(0)->nullable();
             $table->timestamps();

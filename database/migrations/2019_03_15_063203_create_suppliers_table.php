@@ -15,9 +15,9 @@ class CreateSuppliersTable extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('workspace_id')->unsigned()->nullable();
+            $table->integer('workspace_id')->unsigned();
             $table->foreign('workspace_id')->references('id')->on('workspaces');
-            $table->tinyInteger('supplier_type')->default(0)->nullable();
+            $table->tinyInteger('supplier_type')->default(0);
             $table->string('supplier_name', 20)->default('');
             $table->string('contact_name_1', 15)->default('')->nullable();
             $table->string('contact_phone_1', 15)->default('')->nullable();

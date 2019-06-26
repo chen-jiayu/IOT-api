@@ -112,20 +112,20 @@ public function get(Request $request,$field_id)
     }  
     $state_name=DB::table('states')->where('id', '=',$field->state_id )->value('state_name');
     if($field->workspace_id==$workspace_id){
-      $pond=DB::table('ponds')->where('field_id', '=',$field_id )->select('id','pond_name')->get();
+      $pond=DB::table('ponds')->where('field_id', '=',$field_id )->select('id','pond_name','is_closed')->get();
       $i=count($pond);
+      $result2=[];
       for($j=0 ; $j<$i ; $j++){
       $result2[$j]=array(
          'pond_id'=> $pond[$j]->id,
          'pond_name'=> $pond[$j]->pond_name,
-         'is_closed'=>$pond[$j]->is_closed
+         'is_closed'=> $pond[$j]->is_closed
        );
       };
       $result=array(
        'state_name'=> $state_name,
        'workspace_id'=> $field->workspace_id,
        'field_name'=>  $field->field_name,
-       'is_closed'=>$field->is_closed,
        'pond'=>$result2
      );
 

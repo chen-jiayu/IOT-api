@@ -124,6 +124,7 @@ public function get(Request $request,$note_id)
    'note_date'=>$daily_note->note_date,
    'feeding_wieght'=>$daily_note->feeding_wieght,
    'eating_duration'=>$daily_note->eating_duration,
+   'feeding_time'=>$daily_note->feeding_time,
    'note'=>$daily_note->note
  );
 
@@ -148,16 +149,39 @@ public function gets(Request $request)
  try{
    $id=$request->get('remeber_token');
    
-   $result=DB::table('daily_notes')->where('pond_id', '=',$request->input('pond_id'))->get();
+   $daily_note=DB::table('daily_notes')->where('pond_id', '=',$request->input('pond_id'))->get();
    // select('id','workspace_id','field_id','field_id','pond_id',
    //  'feed_id','note_date','feeding_wieght','eating_duration','note')
-   if(empty($result)){
+   if(count($daily_note)==0){
     return response()->json([
       'status' => '0',
       'code'=>2,
       'message'=>'data not found'
     ]);
   }
+  //$result=[];
+  for($i=0;$i<count($daily_note);$i++){
+    $feed=DB::table('field_feeds')->where('id', '=',$daily_note[$i]->feed_id)->select('feed_size','supplier_id')->get();
+    $user=DB::table('users')->where('id', '=',$daily_note[$i]->updated_id)->select('user_name')->get();
+    $result[$i]=array(
+     'daily_note_id'=>$daily_note[$i]->id,
+     'workspace_id'=>$daily_note[$i]->workspace_id,
+     'pond_id'=>$daily_note[$i]->pond_id,
+     'field_id'=>$daily_note[$i]->field_id,
+     'feed_id'=>$feed,
+     'note_date'=>$daily_note[$i]->note_date,
+     'feeding_time'=>$daily_note[$i]->feeding_time,
+     'feeding_wieght'=>$daily_note[$i]->feeding_wieght,
+     'eating_duration'=>$daily_note[$i]->eating_duration,
+     'note'=>$daily_note[$i]->note,
+     'created_id'=>$daily_note[$i]->created_id,
+     'updated_id'=>$user
+     )
+   ;
+    // $feed=[];
+    // $user=[];
+  };
+ // $result=arra
 
   return response()->json([
     'result'=>$result,

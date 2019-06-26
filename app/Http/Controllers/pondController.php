@@ -46,6 +46,7 @@ class pondController extends Controller
       $pond->depth=$request->input('depth');
       $pond->width=$request->input('width');
       $pond->waterwheel=$request->input('waterwheel');
+      $pond->is_closed=$request->input('is_closed');
       $pond->save();
 
       DB::connection()->getPdo()->commit();

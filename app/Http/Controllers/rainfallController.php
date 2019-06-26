@@ -73,7 +73,7 @@ public function get(Request $request,$state_id,$district_id,$time)
   try{
     
     $rainfall=DB::table('rainfalls')->where('CITY', '=',$state_id)->where('TOWN', '=',$district_id)->where('DAY', '=',$time)->get();
-    if(empty($rainfall)){
+    if(count($rainfall)==0){
       return response()->json([
         'status' => '0',
         'code'=>2,
