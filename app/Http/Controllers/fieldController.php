@@ -31,7 +31,7 @@ class fieldController extends Controller
           'message'=>'data duplicate'
         ]);
       }
-      $workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
+      //$workspace_id=DB::table('users')->where('id', '=',$id )->value('workspace_id');
       if(count($workspace_id)==0){
         return response()->json([
           'status' => '0',

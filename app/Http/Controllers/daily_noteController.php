@@ -23,7 +23,7 @@ class daily_noteController extends Controller
     try {
     	$id=$request->get('remeber_token');
 
-      field_feed::find($request->input('feed_id'))->decrement('inventory_weight',$request->input('feeding_wieght'));
+     // field_feed::find($request->input('feed_id'))->decrement('inventory_weight',$request->input('feeding_wieght'));
 
 
       if(count(DB::table('field_feeds')->where('id', '=',$id )->get())==0){
@@ -167,14 +167,17 @@ public function gets(Request $request)
      'workspace_id'=>$daily_note[$i]->workspace_id,
      'pond_id'=>$daily_note[$i]->pond_id,
      'field_id'=>$daily_note[$i]->field_id,
-     'feed_id'=>$feed,
+     'feed_id'=>$daily_note[$i]->feed_id,
+     'feed_size'=>$feed[0]->feed_size,
+     'supplier_id'=>$feed[0]->supplier_id,
      'note_date'=>$daily_note[$i]->note_date,
      'feeding_time'=>$daily_note[$i]->feeding_time,
      'feeding_wieght'=>$daily_note[$i]->feeding_wieght,
      'eating_duration'=>$daily_note[$i]->eating_duration,
      'note'=>$daily_note[$i]->note,
      'created_id'=>$daily_note[$i]->created_id,
-     'updated_id'=>$user
+     'updated_id'=>$daily_note[$i]->updated_id,
+     'user_name'=>$user[0]->user_name
      )
    ;
     

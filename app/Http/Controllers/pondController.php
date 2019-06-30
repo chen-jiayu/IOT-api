@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\user;
 use App\pond;
 use App\pond_shrimp;
@@ -129,7 +130,8 @@ public function get(Request $request,$pond_id)
         ]);
       }
     	   if($pond->workspace_id==$workspace_id){//isclose=0 最新
-          $pond_shrimp = pond_shrimp::find(DB::table('pond_shrimps')->where('pond_id', '=',$pond_id )->where('is_closed', '=',0 )->value('id'));
+          $pond_shrimp = DB::table('pond_shrimps')->where('pond_id', '=',$pond_id )->where('is_closed', '=',0 )->select('id','supplier_id','babysprimp','shrimp_type','number','density','start_date','end_date')->get();
+          
           $result = array(
             'pond_id' =>  $pond->id,
             'field_id' =>  $pond->field_id,
@@ -139,15 +141,7 @@ public function get(Request $request,$pond_id)
             'width' => $pond->width,
             'waterwheel' => $pond->waterwheel,
             'is_closed' => $pond->is_closed,
-            'pond_shrimp'=>array(
-             'id' =>  $pond_shrimp->id,
-             'babysprimp' => $pond_shrimp->babysprimp,
-             'shrimp_type' => $pond_shrimp->shrimp_type,
-             'number' => $pond_shrimp->number,
-             'density' => $pond_shrimp->density,
-             'start_date' => $pond_shrimp->start_date,
-             'end_date' =>$pond_shrimp->end_date
-           )
+            'pond_shrimp'=>$pond_shrimp
           ); 
           
           return response()->json([

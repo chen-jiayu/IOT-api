@@ -78,6 +78,7 @@ public function put(Request $request,$pond_id)
     if($pond->workspace_id==$workspace_id){
       $pondshrimp_id=DB::table('pond_shrimps')->where('pond_id','=',$pond_id)->where('is_closed','=',0 )->value('id');	
       $pondshrimp = pond_shrimp::find($pondshrimp_id);
+      $pond_shrimp->supplier_id=$request->input('supplier_id');
       $pondshrimp->babysprimp=$request->input('babysprimp');
       $pondshrimp->density=$request->input('density');
       $pondshrimp->shrimp_type=$request->input('shrimp_type');

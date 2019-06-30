@@ -69,10 +69,10 @@ class optionController extends Controller
 				]);
 			}
 			if($optid=='shrimptype'){
-				$option=DB::table('options')->where('opt_id', '=','shrimptype')->where('opt_id', '=','shrimptype')->get();
+				$option=DB::table('options')->where('workspace_id', '=',$workspace_id)->where('opt_id', '=','shrimptype')->get();
 			}
 			if($optid=='babysprimp'){
-				$option=DB::table('options')->where('opt_id', '=','babysprimp')->where('opt_id', '=','babysprimp')->get();
+				$option=DB::table('options')->where('workspace_id', '=',$workspace_id)->where('opt_id', '=','babysprimp')->get();
 			}
 			if($optid=='feed_size'){
 				$option=DB::table('options')->where('workspace_id', '=',$workspace_id)->where('opt_id', '=','feed_size')->get();

@@ -81,6 +81,10 @@ Route::post('district', 'districtController@store');//新增縣市
 //option
 Route::get('option/{optid}', 'optionController@get');
 Route::post('option', 'optionController@store');
+//sensor
+Route::get('sensor_group/{sensor_group_id}', 'sensor_groupController@get');
+Route::post('sensor_group', 'sensor_groupController@store');
+Route::get('sensor_groups/{pond_id}', 'sensor_groupController@gets');
 
 
 
