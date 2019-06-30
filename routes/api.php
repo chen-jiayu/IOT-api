@@ -63,7 +63,6 @@ Route::put('pondshrimp/{pond_id}', 'pondshrimpController@put');
 //field_feed
 Route::post('field_feed', 'field_feedController@store');
 Route::get('field_feed/{field_id}', 'field_feedController@gets');
-//Route::put('field_feed/{field_feed_id}', 'field_feedController@put');
 Route::get('field_feed/{field_feed_id}', 'field_feedController@get');
 //field_feed_log
 Route::post('field_feed_log', 'field_feed_logController@store');
@@ -85,6 +84,7 @@ Route::post('option', 'optionController@store');
 Route::get('sensor_group/{sensor_group_id}', 'sensor_groupController@get');
 Route::post('sensor_group', 'sensor_groupController@store');
 Route::get('sensor_groups/{pond_id}', 'sensor_groupController@gets');
+Route::put('sensor_group/{sensor_group_id}', 'sensor_groupController@put');
 
 
 
