@@ -23,7 +23,7 @@ class CreateRainfallsTable extends Migration
             $table->foreign('TOWN')->references('id')->on('districts');
             $table->dateTime('day')->nullable();
             $table->time('time')->nullable();
-            $table->decimal('ELEV', 5, 2)->nullable();
+            $table->decimal('ELEV', 10, 2)->nullable();
             $table->decimal('RAIN', 5, 2)->nullable();
             $table->decimal('MIN_10', 5, 2)->nullable();
             $table->decimal('HOUR_3', 5, 2)->nullable();

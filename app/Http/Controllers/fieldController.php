@@ -117,9 +117,9 @@ public function get(Request $request,$field_id)
       $result2=[];
       for($j=0 ; $j<$i ; $j++){
       $result2[$j]=array(
-         'pond_id'=> $pond[$j]->id,
+         'pond_idjj'=> $pond[$j]->id,
          'pond_name'=> $pond[$j]->pond_name,
-         'is_closed'=> $pond[$j]->is_closed
+         'is_closed'=> 0
        );
       };
       $result=array(

@@ -55,7 +55,8 @@ class districtController extends Controller
 		try {
 			
 			$x = strlen($state_id);
-			if($x==3){
+			if($x==2){
+				$state_id*=10;
 				$districts = DB::table('districts')->where(\DB::raw('SUBSTRING(id, 1, 3)'),'=',$state_id)->select('id','district_name')->get();
 			}
 			if($x==4){

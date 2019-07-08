@@ -181,7 +181,7 @@ public function get(Request $request)
 
     for($j=0 ; $j<$i ; $j++){
       $field=field::find($field_id[$j]->id);  
-      $pond_id = DB::table('ponds')->where('field_id','=',$field_id[$j]->id)->select('id','pond_name')->get(); 
+      $pond_id = DB::table('ponds')->where('field_id','=',$field_id[$j]->id)->select('id','pond_name','is_closed')->get(); 
       $i2=count($pond_id);
      
      $result[$j]=array(
